@@ -8,19 +8,21 @@ export const TimeTrigger: React.FC = () => {
   useEffect(() => {
     const updateTime = () => {
       const now = new Date();
-      setTime(
-        now.toLocaleTimeString('pt-BR', {
-          hour: '2-digit',
-          minute: '2-digit',
-        })
-      );
+      // Use client's locale but force HH:mm format
+      const formattedTime = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      setTime(formattedTime);
     };
 
     updateTime();
-    const interval = setInterval(updateTime, 1000 * 60);
+    // Optional: update every minute if the user stays on the page
+    const interval = setInterval(updateTime, 60000);
     return () => clearInterval(interval);
   }, []);
 
-  if (!time) return null;
+  // Avoid hydration mismatch by rendering nothing initially
+  if (!time) {
+    return <span className="opacity-0">--:--</span>;
+  }
+
   return <span>{time}</span>;
 };
