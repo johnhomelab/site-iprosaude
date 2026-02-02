@@ -1,4 +1,3 @@
-  GNU nano 7.2                                                      src/payload.config.ts                                                               
 // storage-adapter-import-placeholder
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { payloadCloudPlugin } from '@payloadcms/payload-cloud'

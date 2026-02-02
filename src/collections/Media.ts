@@ -1,4 +1,3 @@
-  GNU nano 7.2                                                            Media.ts                                                                      
 import type { CollectionConfig } from 'payload'
 
 export const Media: CollectionConfig = {

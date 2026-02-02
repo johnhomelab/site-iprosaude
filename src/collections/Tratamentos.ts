@@ -3,7 +3,7 @@ import { CollectionConfig } from 'payload';
 export const tratamentos: CollectionConfig = {
   slug: 'tratamentos',
   admin: {
-    useAsTitle: 'tratamentos', // O campo que vai aparecer na lista
+    useAsTitle: 'titulo', // O campo que vai aparecer na lista
   },
   access: {
     read: () => true, // Todo mundo pode ler (para o site mostrar)
