@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
 import { RenderBlocks } from '../../components/RenderBlocks';
+import { trackPageVisit } from '../../lib/tracking';
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -27,6 +28,9 @@ export default async function Page({ params }: Props) {
   if (!page) {
     return notFound();
   }
+
+  // Server-side tracking
+  await trackPageVisit(slug);
 
   return (
     <div>

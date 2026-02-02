@@ -19,5 +19,20 @@ export const CallToAction: Block = {
       name: 'label',
       type: 'text',
     },
+    {
+      name: 'style',
+      type: 'select',
+      defaultValue: 'default',
+      options: [
+        {
+          label: 'Default',
+          value: 'default',
+        },
+        {
+          label: 'Urgent',
+          value: 'urgent',
+        },
+      ],
+    },
   ],
 };

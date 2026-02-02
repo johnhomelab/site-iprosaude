@@ -1,4 +1,3 @@
-  GNU nano 7.2                                                            route.ts                                                                      
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 

@@ -6,130 +6,234 @@ const seed = async () => {
 
   console.log('Seeding database...');
 
-  // --- Page 1: /urgencia ---
-  const urgenciaData = {
-    title: 'Urgência Odontológica',
-    slug: 'urgencia',
-    layout: [
-      {
-        blockType: 'hero',
-        heading: 'Dor de dente não espera.',
-        text: 'Já são {{TIME}}. Chegue em 5min do centro.',
-      },
-      {
-        blockType: 'cta',
-        label: 'LIGAR AGORA (Plantão 24h)',
-        url: 'tel:75991904849',
-      },
-      {
-        blockType: 'cta',
-        label: 'WhatsApp (Plantão 24h)',
-        url: 'https://wa.me/5575991897547?text=Preciso%20de%20atendimento%20%20urgente%20por%20favor!',
-      },
-      {
-        blockType: 'features',
-        features: [
-          {
-            title: 'Paciente Satisfeito',
-            description: 'Cheguei de madrugada com dor insuportável e fui atendido em 10min.',
-          },
-          {
-            title: 'Ana Souza',
-            description: 'A equipe de plantão foi anjos na minha vida. Dor eliminada na hora.',
-          },
-          {
-            title: 'Carlos Pereira',
-            description: 'Excelente atendimento de urgência. Profissionais muito atenciosos.',
-          },
-        ],
-      },
-    ],
-  };
-
-  const existingUrgencia = await payload.find({
-    collection: 'landing-pages',
-    where: {
-      slug: {
-        equals: 'urgencia',
-      },
+  const pages = [
+    {
+      title: 'Urgência Odontológica',
+      slug: 'urgencia',
+      layout: [
+        {
+          blockType: 'hero',
+          heading: 'Dor de dente não espera.',
+          text: 'Já são {{TIME}} e a dor não espera. Atendimento de emergência agora: chegue em 10min do centro.',
+        },
+        {
+          blockType: 'cta',
+          label: 'LIGAR AGORA (Plantão 24h)',
+          url: 'tel:75991904849',
+          style: 'urgent',
+        },
+        {
+          blockType: 'features',
+          features: [
+            {
+              title: 'Alívio Imediato',
+              description: 'Protocolos avançados para eliminar a dor na primeira consulta.',
+            },
+            {
+              title: 'Plantão 24h',
+              description: 'Equipe pronta para atender sua emergência a qualquer hora.',
+            },
+            {
+              title: 'Localização Central',
+              description: 'Fácil acesso no centro da cidade.',
+            },
+          ],
+        },
+        {
+            blockType: 'content',
+            columns: [
+                {
+                    size: 'full',
+                    richText: {
+                        root: {
+                            type: 'root',
+                            children: [
+                                {
+                                    type: 'paragraph',
+                                    children: [
+                                        {
+                                            type: 'text',
+                                            text: 'Não deixe para depois. Infecções dentárias podem se espalhar rapidamente. Nossa equipe de plantão está equipada para resolver seu problema agora.'
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        }
+      ],
     },
-  });
-
-  if (existingUrgencia.totalDocs > 0) {
-    console.log('Updating /urgencia...');
-    await payload.update({
-      collection: 'landing-pages',
-      id: existingUrgencia.docs[0].id,
-      data: urgenciaData,
-    });
-  } else {
-    console.log('Creating /urgencia...');
-    await payload.create({
-      collection: 'landing-pages',
-      data: urgenciaData,
-    });
-  }
-
-  // --- Page 2: /implantes ---
-  const implantesData = {
-    title: 'Implantes Dentários',
-    slug: 'implantes',
-    layout: [
-      {
-        blockType: 'hero',
-        heading: 'Recupere seu sorriso e sua segurança.',
-        text: 'Hoje já é dia {{DATE}}. Você vai aguardar mais quanto tempo para transformar sua autoestima e voltar a mastigar sem medo?',
-      },
-      {
-        blockType: 'features',
-        features: [
-          {
-            title: 'Carga Imediata',
-            description: 'Implantes com Carga Imediata.',
-          },
-          {
-            title: 'Conforto Total',
-            description: 'Sedação Consciente. Sem corte e sem Dor.',
-          },
-          {
-            title: 'Tecnologia 3D',
-            description: 'Planejamento digital para máxima precisão.',
-          },
-          {
-            title: 'Rapidez',
-            description: 'Dentes fixos no mesmo dia.',
-          },
-        ],
-      },
-      {
-        blockType: 'form',
-        formId: 'Agendar Avaliação Oficial',
-      },
-    ],
-  };
-
-  const existingImplantes = await payload.find({
-    collection: 'landing-pages',
-    where: {
-      slug: {
-        equals: 'implantes',
-      },
+    {
+      title: 'Implantes Dentários',
+      slug: 'implantes',
+      layout: [
+        {
+          blockType: 'hero',
+          heading: 'Recupere seu sorriso e sua segurança.',
+          text: 'Hoje já é dia {{DATE}}. Você vai aguardar mais quanto tempo para transformar sua autoestima e voltar a mastigar sem medo?',
+        },
+        {
+          blockType: 'features',
+          features: [
+            {
+              title: 'Carga Imediata',
+              description: 'Saia com dentes fixos no mesmo dia da cirurgia.',
+            },
+            {
+              title: 'Sem Dor',
+              description: 'Técnicas minimamente invasivas e sedação consciente.',
+            },
+            {
+              title: 'Durabilidade',
+              description: 'Materiais de titânio e zircônia de altíssima qualidade.',
+            },
+            {
+              title: 'Estética Natural',
+              description: 'Dentes que parecem e funcionam como os naturais.',
+            },
+          ],
+        },
+        {
+          blockType: 'content',
+          columns: [
+             {
+                size: 'full',
+                richText: {
+                    root: {
+                        type: 'root',
+                        children: [
+                             {
+                                type: 'heading',
+                                tag: 'h2',
+                                children: [{ type: 'text', text: 'Por que escolher implantes?' }]
+                            },
+                            {
+                                type: 'paragraph',
+                                children: [
+                                    {
+                                        type: 'text',
+                                        text: 'A perda dentária afeta não apenas a mastigação, mas também a confiança. Nossos especialistas utilizam tecnologia 3D para garantir precisão e um resultado perfeito.'
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+             }
+          ]
+        },
+        {
+          blockType: 'cta',
+          label: 'Quero Agendar Avaliação',
+          url: '#form',
+          style: 'default',
+        },
+        {
+          blockType: 'form',
+          formId: 'implantes-lead',
+        },
+      ],
     },
-  });
+    {
+      title: 'Clínica Odontológica',
+      slug: 'home',
+      layout: [
+        {
+          blockType: 'hero',
+          heading: 'Excelência em Odontologia ao seu Alcance.',
+          text: 'Cuidamos do seu sorriso com tecnologia de ponta e atendimento humanizado. Venha nos conhecer.',
+        },
+        {
+          blockType: 'features',
+          features: [
+            {
+              title: 'Multidisciplinar',
+              description: 'Todas as especialidades em um só lugar.',
+            },
+            {
+              title: 'Tecnologia',
+              description: 'Equipamentos modernos para diagnósticos precisos.',
+            },
+            {
+              title: 'Conforto',
+              description: 'Ambiente climatizado e acolhedor para você e sua família.',
+            },
+          ],
+        },
+        {
+          blockType: 'cta',
+          label: 'Conheça Nossos Tratamentos',
+          url: '/implantes',
+          style: 'default',
+        },
+      ],
+    },
+    {
+        title: 'Próteses Dentárias',
+        slug: 'protese',
+        layout: [
+            {
+                blockType: 'hero',
+                heading: 'Volte a Sorrir com Confiança.',
+                text: 'Próteses modernas, confortáveis e com aspecto natural. Redescubra o prazer de sorrir.',
+            },
+            {
+                blockType: 'features',
+                features: [
+                    {
+                        title: 'Personalização',
+                        description: 'Cada prótese é desenhada para combinar com seu rosto.',
+                    },
+                    {
+                        title: 'Conforto',
+                        description: 'Ajuste perfeito para evitar desconfortos e feridas.',
+                    },
+                    {
+                        title: 'Materiais Premium',
+                        description: 'Resinas e cerâmicas de alta durabilidade e estética.',
+                    }
+                ]
+            },
+            {
+                blockType: 'cta',
+                label: 'Agende uma Consulta',
+                url: '#form',
+                style: 'default'
+            },
+            {
+                blockType: 'form',
+                formId: 'protese-lead'
+            }
+        ]
+    }
+  ];
 
-  if (existingImplantes.totalDocs > 0) {
-    console.log('Updating /implantes...');
-    await payload.update({
+  for (const pageData of pages) {
+    const existingPage = await payload.find({
       collection: 'landing-pages',
-      id: existingImplantes.docs[0].id,
-      data: implantesData,
+      where: {
+        slug: {
+          equals: pageData.slug,
+        },
+      },
     });
-  } else {
-    console.log('Creating /implantes...');
-    await payload.create({
-      collection: 'landing-pages',
-      data: implantesData,
-    });
+
+    if (existingPage.totalDocs > 0) {
+      console.log(`Updating /${pageData.slug}...`);
+      await payload.update({
+        collection: 'landing-pages',
+        id: existingPage.docs[0].id,
+        data: pageData,
+      });
+    } else {
+      console.log(`Creating /${pageData.slug}...`);
+      await payload.create({
+        collection: 'landing-pages',
+        data: pageData,
+      });
+    }
   }
 
   console.log('Seed completed successfully.');
