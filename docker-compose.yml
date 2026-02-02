@@ -1,25 +1,20 @@
-version: '3'
+version: '3.8'
 
 services:
   payload:
-    image: node:18-alpine
+    build: .  # Isso diz ao Docker para usar o Dockerfile que o Jules criou
+    restart: always
     ports:
       - '3010:3000'
     environment:
-      - DATABASE_URI=postgres://john:6d824a8fcb75e45621bded4328a9cb02@192.168.0.17:5432/site   #postgres://user:password@localhost:5432/db
-      - REDIS_URL=redis://localhost:6379
+      - DATABASE_URI=postgres://john:6d824a8fcb75e45621bded4328a9cb02@192.168.0.17:5432/site
+      - REDIS_URL=redis://192.168.0.17:6379
       - PAYLOAD_SECRET=6d824a8fcb75e45621bded4328a9cb02
       - NODE_ENV=production
     networks:
-      - app
-    volumes:
-      - .:/home/node/app
-      - node_modules:/home/node/app/node_modules
-    working_dir: /home/node/app/
-    command: sh -c "corepack enable && corepack prepare pnpm@latest --activate && pnpm install && pnpm dev"
-    networks:
-      app:
-        external: true
+      - app_network
 
-
-
+networks:
+  app_network:
+    external: true
+    name: app  # Aqui você coloca o nome real da rede que você criou no Portainer
