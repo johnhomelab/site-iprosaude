@@ -8,6 +8,11 @@ export const GET = async () => {
 
   const data = await payload.find({
     collection: 'users',
+    limit: 100,
+    select: {
+      email: true,
+      id: true,
+    },
   })
 
   return Response.json(data)
