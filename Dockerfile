@@ -27,7 +27,8 @@ ARG PAYLOAD_SECRET=dummy_secret_for_build
 ARG DATABASE_URI=postgres://dummy:5432/dummy
 
 # Build the application
-RUN npm run build
+# Desativa a exportação estática de rotas problemáticas no build
+RUN NEXT_OUTPUT_TYPE=standalone npm run build
 
 # Production image, copy all the files and run next
 FROM base AS runner
