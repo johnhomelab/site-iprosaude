@@ -51,6 +51,9 @@ RUN chown nextjs:nodejs .next
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
+# Copy health check script
+COPY --from=builder --chown=nextjs:nodejs /app/src/scripts/check-env.js ./check-env.js
+
 USER nextjs
 
 EXPOSE 3010
@@ -58,4 +61,4 @@ EXPOSE 3010
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-CMD ["node", "server.js"]
+CMD ["sh", "-c", "node check-env.js && node server.js"]
