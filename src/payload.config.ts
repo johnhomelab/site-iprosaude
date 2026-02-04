@@ -11,6 +11,7 @@ import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { tratamentos } from './collections/Tratamentos'
 import { LandingPages } from './collections/LandingPages'
+import { Settings } from './globals/Settings'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -23,6 +24,7 @@ export default buildConfig({
     },
   },
   collections: [Users, Media, tratamentos, LandingPages],
+  globals: [Settings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

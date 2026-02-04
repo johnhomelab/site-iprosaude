@@ -3,6 +3,8 @@ import { HeroBlock } from './blocks/HeroBlock';
 import { ContentBlock } from './blocks/ContentBlock';
 import { FeaturesBlock } from './blocks/FeaturesBlock';
 import { FormBlock } from './blocks/FormBlock';
+import { TreatmentListBlock } from './blocks/TreatmentListBlock';
+import { BeforeAfterBlock } from './blocks/BeforeAfterBlock';
 import { SmartText } from './SmartText';
 import type { LandingPage } from '@/payload-types';
 
@@ -31,6 +33,10 @@ export const RenderBlocks: React.FC<Props> = ({ layout }) => {
             return <FeaturesBlock key={key} {...block} />;
           case 'form':
             return <FormBlock key={key} {...block} />;
+          case 'treatmentList':
+            return <TreatmentListBlock key={key} {...block} />;
+          case 'beforeAfter':
+            return <BeforeAfterBlock key={key} {...block} />;
           case 'cta':
             const ctaBlock = block as any;
             const isUrgent = ctaBlock.style === 'urgent';
