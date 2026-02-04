@@ -6,8 +6,35 @@ export const FormBlock: React.FC<any> = (props) => {
   const [formData, setFormData] = useState({ name: '', email: '', phone: '' });
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
 
+  const formatPhone = (value: string) => {
+    // Remove all non-digits
+    let numbers = value.replace(/\D/g, '');
+
+    // Limit to 11 digits
+    if (numbers.length > 11) numbers = numbers.substring(0, 11);
+
+    // Apply mask
+    numbers = numbers.replace(/^(\d{2})(\d)/g, '($1) $2');
+    numbers = numbers.replace(/(\d)(\d{4})$/, '$1-$2');
+
+    return numbers;
+  };
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatPhone(e.target.value);
+    setFormData({ ...formData, phone: formatted });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Validate Phone Length
+    const digits = formData.phone.replace(/\D/g, '');
+    if (digits.length < 10) {
+        alert('Por favor, insira um telefone válido com DDD.');
+        return;
+    }
+
     setStatus('submitting');
     try {
       const res = await fetch('/api/leads', {
@@ -63,9 +90,10 @@ export const FormBlock: React.FC<any> = (props) => {
           <input
             type="tel"
             required
+            placeholder="(11) 99999-9999"
             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             value={formData.phone}
-            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+            onChange={handlePhoneChange}
           />
         </div>
 
