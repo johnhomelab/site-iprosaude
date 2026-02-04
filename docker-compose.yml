@@ -8,14 +8,14 @@ services:
     ports:
       - '3010:3000'
     environment:
-      - DATABASE_URI=postgres://john:6d824a8fcb75e45621bded4328a9cb02@192.168.0.17:5432/site
-      - REDIS_URL=redis://192.168.0.17:6379
+      - DATABASE_URI=postgres://john:6d824a8fcb75e45621bded4328a9cb02@postgres:5432/postgres
+      - REDIS_URL=redis://redis:6379
       - PAYLOAD_SECRET=6d824a8fcb75e45621bded4328a9cb02
       - NODE_ENV=production
     networks:
-      - app_network
+      - app
 
 networks:
-  app_network:
+  app:
     external: true
     name: app  # Aqui você coloca o nome real da rede que você criou no Portainer
