@@ -8,6 +8,8 @@ import { trackPageVisit } from '../../lib/tracking';
 import { Metadata } from 'next';
 import type { Settings } from '@/payload-types';
 
+export const dynamic = 'force-dynamic'
+
 type Props = {
   params: Promise<{ slug: string }>;
 };
@@ -77,17 +79,3 @@ export default async function Page({ params }: Props) {
   );
 }
 
-export async function generateStaticParams() {
-  const payload = await getPayload({ config: configPromise });
-  const pages = await payload.find({
-    collection: 'landing-pages',
-    limit: 1000, 
-    select: {
-      slug: true,
-    }
-  });
-
-  return pages.docs.map((page) => ({
-    slug: page.slug,
-  }));
-}

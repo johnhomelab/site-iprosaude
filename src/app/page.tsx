@@ -7,6 +7,8 @@ import { FloatingWhatsApp } from '../components/FloatingWhatsApp';
 import { Metadata } from 'next';
 import type { Settings } from '@/payload-types';
 
+export const dynamic = 'force-dynamic'
+
 export async function generateMetadata(): Promise<Metadata> {
   const payload = await getPayload({ config: configPromise });
   const result = await payload.find({
