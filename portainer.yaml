@@ -14,7 +14,7 @@ services:
         max-file: "3"
 
     environment:
-      DATABASE_URI: postgres://john:6d824a8fcb75e45621bded4328a9cb02@postgres:5432/postgres
+      DATABASE_URI: postgres://john:6d824a8fcb75e45621bded4328a9cb02@postgres:5432/iprosaude_site
       REDIS_URL: redis://redis:6379
       PAYLOAD_SECRET: 6d824a8fcb75e45621bded4328a9cb02
       NODE_ENV: production
