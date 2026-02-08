@@ -148,6 +148,7 @@ export interface LandingPage {
   id: number;
   title: string;
   slug: string;
+  showFloatingButton?: boolean | null;
   layout: (
     | {
         heading: string;
@@ -156,6 +157,16 @@ export interface LandingPage {
         id?: string | null;
         blockName?: string | null;
         blockType: 'hero';
+      }
+    | {
+        title: string;
+        subtitle?: string | null;
+        ctaText?: string | null;
+        ctaLink?: string | null;
+        image?: (number | null) | Media;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'hero-gold';
       }
     | {
         content?: {
@@ -190,6 +201,20 @@ export interface LandingPage {
         blockType: 'features';
       }
     | {
+        items?:
+          | {
+              name?: string | null;
+              testimonial?: string | null;
+              rating?: number | null;
+              image?: (number | null) | Media;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'testimonials';
+      }
+    | {
         formId?: string | null;
         id?: string | null;
         blockName?: string | null;
@@ -204,7 +229,28 @@ export interface LandingPage {
         blockName?: string | null;
         blockType: 'cta';
       }
+    | {
+        title?: string | null;
+        description?: string | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'treatmentList';
+      }
+    | {
+        beforeImage: number | Media;
+        afterImage: number | Media;
+        labelBefore?: string | null;
+        labelAfter?: string | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'beforeAfter';
+      }
   )[];
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    image?: (number | null) | Media;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -359,6 +405,7 @@ export interface TratamentosSelect<T extends boolean = true> {
 export interface LandingPagesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  showFloatingButton?: T;
   layout?:
     | T
     | {
@@ -368,6 +415,17 @@ export interface LandingPagesSelect<T extends boolean = true> {
               heading?: T;
               text?: T;
               backgroundImage?: T;
+              id?: T;
+              blockName?: T;
+            };
+        'hero-gold'?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              ctaText?: T;
+              ctaLink?: T;
+              image?: T;
               id?: T;
               blockName?: T;
             };
@@ -391,6 +449,21 @@ export interface LandingPagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        testimonials?:
+          | T
+          | {
+              items?:
+                | T
+                | {
+                    name?: T;
+                    testimonial?: T;
+                    rating?: T;
+                    image?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
         form?:
           | T
           | {
@@ -408,6 +481,31 @@ export interface LandingPagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        treatmentList?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              id?: T;
+              blockName?: T;
+            };
+        beforeAfter?:
+          | T
+          | {
+              beforeImage?: T;
+              afterImage?: T;
+              labelBefore?: T;
+              labelAfter?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
       };
   updatedAt?: T;
   createdAt?: T;
