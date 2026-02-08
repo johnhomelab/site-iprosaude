@@ -225,13 +225,13 @@ const seed = async () => {
       await payload.update({
         collection: 'landing-pages',
         id: existingPage.docs[0].id,
-        data: pageData,
+        data: pageData as any,
       });
     } else {
       console.log(`Creating /${pageData.slug}...`);
       await payload.create({
         collection: 'landing-pages',
-        data: pageData,
+        data: pageData as any,
       });
     }
   }

@@ -1,7 +1,9 @@
 import React from 'react';
 import { HeroBlock } from './blocks/HeroBlock';
+import { HeroGoldBlock } from './blocks/HeroGoldBlock';
 import { ContentBlock } from './blocks/ContentBlock';
 import { FeaturesBlock } from './blocks/FeaturesBlock';
+import { TestimonialsBlock } from './blocks/TestimonialsBlock';
 import { FormBlock } from './blocks/FormBlock';
 import { TreatmentListBlock } from './blocks/TreatmentListBlock';
 import { BeforeAfterBlock } from './blocks/BeforeAfterBlock';
@@ -27,10 +29,14 @@ export const RenderBlocks: React.FC<Props> = ({ layout }) => {
         switch (blockType) {
           case 'hero':
             return <HeroBlock key={key} {...block} />;
+          case 'hero-gold':
+            return <HeroGoldBlock key={key} {...block} />;
           case 'content':
             return <ContentBlock key={key} {...block} />;
           case 'features':
             return <FeaturesBlock key={key} {...block} />;
+          case 'testimonials':
+            return <TestimonialsBlock key={key} {...block} />;
           case 'form':
             return <FormBlock key={key} {...block} />;
           case 'treatmentList':

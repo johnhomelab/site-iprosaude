@@ -6,6 +6,8 @@ import { BeforeAfter } from '../blocks/BeforeAfter';
 import { Form } from '../blocks/Form';
 import { CallToAction } from '../blocks/CallToAction';
 import { TreatmentList } from '../blocks/TreatmentList';
+import { HeroGold } from '../blocks/HeroGold';
+import { Testimonials } from '../blocks/Testimonials';
 
 export const LandingPages: CollectionConfig = {
   slug: 'landing-pages',
@@ -39,8 +41,10 @@ export const LandingPages: CollectionConfig = {
       required: true,
       blocks: [
         Hero,
+        HeroGold,
         Content,
         Features,
+        Testimonials,
         Form,
         CallToAction,
         TreatmentList,
