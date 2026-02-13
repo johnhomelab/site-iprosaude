@@ -1,7 +1,6 @@
 import React from 'react';
-import { getPayload } from 'payload';
-import configPromise from '@payload-config';
 import type { Settings } from '@/payload-types';
+import { getSettings } from '@/lib/getSettings';
 
 export const dynamic = 'force-dynamic';
 
@@ -19,12 +18,7 @@ export default async function RootLayout({
   const canLoadSettings = Boolean(databaseUri) && !databaseUri?.includes('dummy');
 
   const settings = canLoadSettings
-    ? await (async () => {
-        const payload = await getPayload({ config: configPromise });
-        return (await payload.findGlobal({
-          slug: 'settings',
-        })) as Settings;
-      })()
+    ? await getSettings()
     : null;
 
   const headerScripts = settings?.analytics?.headerScripts;

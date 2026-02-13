@@ -6,7 +6,7 @@ import { RenderBlocks } from '../../components/RenderBlocks';
 import { FloatingWhatsApp } from '../../components/FloatingWhatsApp';
 import { trackPageVisit } from '../../lib/tracking';
 import { Metadata } from 'next';
-import type { Settings } from '@/payload-types';
+import { getSettings } from '@/lib/getSettings';
 
 export const dynamic = 'force-dynamic'
 
@@ -67,9 +67,7 @@ export default async function Page({ params }: Props) {
   // Server-side tracking
   await trackPageVisit(slug);
 
-  const settings = await payload.findGlobal({
-    slug: 'settings',
-  }) as Settings;
+  const settings = await getSettings();
 
   return (
     <div>
@@ -78,4 +76,3 @@ export default async function Page({ params }: Props) {
     </div>
   );
 }
-

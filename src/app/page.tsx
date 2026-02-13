@@ -5,7 +5,7 @@ import configPromise from '@payload-config';
 import { RenderBlocks } from '../components/RenderBlocks';
 import { FloatingWhatsApp } from '../components/FloatingWhatsApp';
 import { Metadata } from 'next';
-import type { Settings } from '@/payload-types';
+import { getSettings } from '@/lib/getSettings';
 
 export const dynamic = 'force-dynamic'
 
@@ -57,9 +57,7 @@ export default async function Page() {
     return notFound();
   }
 
-  const settings = await payload.findGlobal({
-    slug: 'settings',
-  }) as Settings;
+  const settings = await getSettings();
 
   return (
     <div>
