@@ -1,6 +1,7 @@
 import React from 'react';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
+import Image from 'next/image';
 import { SmartText } from '../SmartText';
 
 export const TreatmentListBlock = async (props: any) => {
@@ -34,11 +35,15 @@ export const TreatmentListBlock = async (props: any) => {
               {t.imagemDestaque &&
                 typeof t.imagemDestaque === 'object' &&
                 t.imagemDestaque.url && (
-                  <img
-                    src={t.imagemDestaque.url}
-                    alt={t.imagemDestaque.alt || t.titulo}
-                    className="w-full h-48 object-cover"
-                  />
+                  <div className="relative w-full h-48">
+                    <Image
+                      src={t.imagemDestaque.url}
+                      alt={t.imagemDestaque.alt || t.titulo}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    />
+                  </div>
                 )}
               <div className="p-6">
                 <h3 className="text-xl font-semibold mb-2">{t.titulo}</h3>
