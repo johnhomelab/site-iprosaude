@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 
 export const BeforeAfterBlock = (props: any) => {
   const { beforeImage, afterImage, labelBefore, labelAfter } = props;
@@ -21,18 +22,22 @@ export const BeforeAfterBlock = (props: any) => {
       <div className="container mx-auto px-4 max-w-5xl">
         <div className="relative w-full aspect-[4/3] md:aspect-video rounded-xl overflow-hidden shadow-2xl select-none group">
           {/* After Image (Background - Right Side effectively) */}
-          <img
+          <Image
             src={afterUrl}
             alt="After"
-            className="absolute inset-0 w-full h-full object-cover"
+            fill
+            className="object-cover"
+            sizes="(max-width: 1024px) 100vw, 1024px"
           />
 
           {/* Before Image (Foreground - Left Side - Clipped) */}
-          <img
+          <Image
             src={beforeUrl}
             alt="Before"
-            className="absolute inset-0 w-full h-full object-cover z-10"
+            fill
+            className="object-cover z-10"
             style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
+            sizes="(max-width: 1024px) 100vw, 1024px"
           />
 
           {/* Slider Handle Line */}
