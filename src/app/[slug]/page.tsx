@@ -1,14 +1,13 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
-import { getPayload } from 'payload';
-import configPromise from '@payload-config';
 import { RenderBlocks } from '../../components/RenderBlocks';
 import { FloatingWhatsApp } from '../../components/FloatingWhatsApp';
 import { trackPageVisit } from '../../lib/tracking';
 import { Metadata } from 'next';
 import { getSettings } from '@/lib/getSettings';
+import { getPageBySlug } from '@/lib/getPageBySlug';
 
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -16,18 +15,7 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const payload = await getPayload({ config: configPromise });
-  const result = await payload.find({
-    collection: 'landing-pages',
-    where: {
-      slug: {
-        equals: slug,
-      },
-    },
-    limit: 1,
-  });
-
-  const page = result.docs[0];
+  const page = await getPageBySlug(slug);
 
   if (!page) {
     return {};
@@ -46,19 +34,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function Page({ params }: Props) {
   const { slug } = await params;
-  const payload = await getPayload({ config: configPromise });
-
-  const result = await payload.find({
-    collection: 'landing-pages',
-    where: {
-      slug: {
-        equals: slug,
-      },
-    },
-    limit: 1,
-  });
-
-  const page = result.docs[0];
+  const page = await getPageBySlug(slug);
 
   if (!page) {
     return notFound();
