@@ -210,21 +210,29 @@ const seed = async () => {
     }
   ];
 
-  for (const pageData of pages) {
-    const existingPage = await payload.find({
-      collection: 'landing-pages',
-      where: {
-        slug: {
-          equals: pageData.slug,
-        },
-      },
-    });
+  const slugs = pages.map((page) => page.slug);
 
-    if (existingPage.totalDocs > 0) {
+  const existingPages = await payload.find({
+    collection: 'landing-pages',
+    where: {
+      slug: {
+        in: slugs,
+      },
+    },
+    limit: 0,
+    pagination: false,
+  });
+
+  const existingPagesMap = new Map(existingPages.docs.map((doc) => [doc.slug, doc]));
+
+  for (const pageData of pages) {
+    const existingPage = existingPagesMap.get(pageData.slug);
+
+    if (existingPage) {
       console.log(`Updating /${pageData.slug}...`);
       await payload.update({
         collection: 'landing-pages',
-        id: existingPage.docs[0].id,
+        id: existingPage.id,
         data: pageData as any,
       });
     } else {
