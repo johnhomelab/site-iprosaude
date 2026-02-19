@@ -1,27 +1,15 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
-import { getPayload } from 'payload';
-import configPromise from '@payload-config';
 import { RenderBlocks } from '../../components/RenderBlocks';
 import { FloatingWhatsApp } from '../../components/FloatingWhatsApp';
 import { Metadata } from 'next';
 import { getSettings } from '@/lib/getSettings';
+import { getPageBySlug } from '@/lib/getPageBySlug';
 
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const payload = await getPayload({ config: configPromise });
-  const result = await payload.find({
-    collection: 'landing-pages',
-    where: {
-      slug: {
-        equals: 'urgencia-24h',
-      },
-    },
-    limit: 1,
-  });
-
-  const page = result.docs[0];
+  const page = await getPageBySlug('urgencia-24h');
 
   if (!page) {
     return {};
@@ -39,19 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Page() {
-  const payload = await getPayload({ config: configPromise });
-
-  const result = await payload.find({
-    collection: 'landing-pages',
-    where: {
-      slug: {
-        equals: 'urgencia-24h',
-      },
-    },
-    limit: 1,
-  });
-
-  const page = result.docs[0];
+  const page = await getPageBySlug('urgencia-24h');
 
   if (!page) {
     return notFound();
