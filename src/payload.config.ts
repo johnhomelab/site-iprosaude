@@ -23,6 +23,10 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
+  routes: {
+    admin: "/cms/admin",
+    api: "/cms/api",
+  },
   collections: [Users, Media, tratamentos, LandingPages],
   globals: [Settings],
   editor: lexicalEditor(),
