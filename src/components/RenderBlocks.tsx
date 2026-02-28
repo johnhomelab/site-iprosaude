@@ -7,7 +7,11 @@ import { TestimonialsBlock } from './blocks/TestimonialsBlock';
 import { FormBlock } from './blocks/FormBlock';
 import { TreatmentListBlock } from './blocks/TreatmentListBlock';
 import { BeforeAfterBlock } from './blocks/BeforeAfterBlock';
-import { SmartText } from './SmartText';
+import { CallToActionBlock } from './blocks/CallToActionBlock'; // Importamos o componente limpo
+import { AuthorityBlock } from './blocks/AuthorityBlock'; // Novo Bloco
+import { FaqBlock } from './blocks/FaqBlock'; // Novo Bloco
+import { LocationBlock } from './blocks/LocationBlock'; // Novo Bloco
+
 import type { LandingPage } from '@/payload-types';
 
 type Props = {
@@ -43,44 +47,18 @@ export const RenderBlocks: React.FC<Props> = ({ layout }) => {
             return <TreatmentListBlock key={key} {...block} />;
           case 'beforeAfter':
             return <BeforeAfterBlock key={key} {...block} />;
-          
-          case 'cta': {
-  const ctaBlock = block as any;
-
-  // compat: novo formato (botao.{label,url,style}) + antigo (label/url/style no topo)
-  const btn = ctaBlock.botao ?? {};
-  const style = (btn.style ?? ctaBlock.style ?? 'default') as string;
-  const url = (btn.url ?? ctaBlock.url ?? '') as string;
-  const label = (btn.label ?? ctaBlock.label ?? '') as string;
-
-  const isUrgent = style === 'urgent';
-  const isWhats = style === 'whatsapp';
-
-  const btnClasses =
-    isUrgent
-      ? 'inline-block px-6 py-3 rounded-lg font-semibold bg-red-600 text-white hover:opacity-90'
-      : isWhats
-        ? 'inline-block px-6 py-3 rounded-lg font-semibold bg-green-600 text-white hover:opacity-90'
-        : 'inline-block px-6 py-3 rounded-lg font-semibold bg-black text-white hover:opacity-90';
-
-  return (
-    <div
-      key={key}
-      className={`cta-block p-8 ${isUrgent ? 'bg-red-50' : 'bg-gray-100'} text-center my-8`}
-    >
-      {ctaBlock.text && (
-        <div className="max-w-3xl mx-auto text-lg">
-          <SmartText text={ctaBlock.text} />
-        </div>
-      )}
-
-      {url && (
-        <div className="mt-6">
-          <a href={url} className={btnClasses}>
-            {label ? <SmartText text={label} /> : 'Falar com a clínica'}
-          </a>
-        </div>
-      )}
+          case 'cta':
+            return <CallToActionBlock key={key} {...block} />; // Agora ele puxa o arquivo externo!
+          case 'authority':
+            return <AuthorityBlock key={key} {...block} />; // Pluga a Autoridade
+          case 'faq':
+            return <FaqBlock key={key} {...block} />; // Pluga o FAQ
+          case 'location':
+            return <LocationBlock key={key} {...block} />; // Pluga o Mapa
+          default:
+            return null;
+        }
+      })}
     </div>
   );
-}
+};
