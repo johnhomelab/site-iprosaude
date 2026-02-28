@@ -13,12 +13,24 @@ export const HeroGold: Block = {
       type: 'text',
     },
     {
-      name: 'ctaText',
-      type: 'text',
-    },
-    {
-      name: 'ctaLink',
-      type: 'text',
+      name: 'botao',
+      type: 'group',
+      label: 'Configuração do Botão',
+      fields: [
+        { name: 'texto', type: 'text', label: 'Texto do Botão (Ex: Agendar Agora)' },
+        { name: 'url', type: 'text', label: 'Link (Ex: https://wa.me/...)' },
+        {
+          name: 'cor',
+          type: 'select',
+          defaultValue: 'dourado',
+          label: 'Cor do Botão',
+          options: [
+            { label: 'Verde (WhatsApp)', value: 'verde' },
+            { label: 'Dourado (Padrão)', value: 'dourado' },
+            { label: 'Vermelho (Emergência 24h)', value: 'vermelho' },
+          ],
+        },
+      ],
     },
     {
       name: 'image',

@@ -8,9 +8,16 @@ import { CallToAction } from '../blocks/CallToAction';
 import { TreatmentList } from '../blocks/TreatmentList';
 import { HeroGold } from '../blocks/HeroGold';
 import { Testimonials } from '../blocks/Testimonials';
+import { Faq } from '../blocks/Faq';
+import { Team } from '../blocks/Team';
+import { Location } from '../blocks/Location';
+import { Authority } from '../blocks/Authority';
 
 export const LandingPages: CollectionConfig = {
   slug: 'landing-pages',
+  access: {
+  read: () => true,
+  },
   admin: {
     useAsTitle: 'title',
   },
@@ -49,6 +56,10 @@ export const LandingPages: CollectionConfig = {
         CallToAction,
         TreatmentList,
         BeforeAfter,
+		Faq, // <--- ADICIONAR AQUI
+        Team, // <--- ADICIONAR AQUI
+        Location, // <--- ADICIONAR AQUI
+		Authority,
       ],
     },
     {

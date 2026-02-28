@@ -71,6 +71,8 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: number;
+  nome: string;
+  role?: ('admin' | 'editor') | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -125,6 +127,14 @@ export interface Media {
       filesize?: number | null;
       filename?: string | null;
     };
+    hero?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
   };
 }
 /**
@@ -136,7 +146,17 @@ export interface Tratamento {
   titulo: string;
   slug: string;
   descricao?: string | null;
+  beneficios?:
+    | {
+        beneficio?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   imagemDestaque?: (number | null) | Media;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -161,8 +181,11 @@ export interface LandingPage {
     | {
         title: string;
         subtitle?: string | null;
-        ctaText?: string | null;
-        ctaLink?: string | null;
+        botao?: {
+          texto?: string | null;
+          url?: string | null;
+          cor?: ('verde' | 'dourado' | 'vermelho') | null;
+        };
         image?: (number | null) | Media;
         id?: string | null;
         blockName?: string | null;
@@ -191,6 +214,7 @@ export interface LandingPage {
     | {
         features?:
           | {
+              icone?: (number | null) | Media;
               title?: string | null;
               description?: string | null;
               id?: string | null;
@@ -222,9 +246,11 @@ export interface LandingPage {
       }
     | {
         text?: string | null;
-        url?: string | null;
-        label?: string | null;
-        style?: ('default' | 'urgent') | null;
+        botao?: {
+          label?: string | null;
+          url?: string | null;
+          style?: ('default' | 'urgent' | 'whatsapp') | null;
+        };
         id?: string | null;
         blockName?: string | null;
         blockType: 'cta';
@@ -232,11 +258,13 @@ export interface LandingPage {
     | {
         title?: string | null;
         description?: string | null;
+        tratamentosSelecionados?: (number | Tratamento)[] | null;
         id?: string | null;
         blockName?: string | null;
         blockType: 'treatmentList';
       }
     | {
+        layout?: ('default' | 'reverse') | null;
         beforeImage: number | Media;
         afterImage: number | Media;
         labelBefore?: string | null;
@@ -244,6 +272,62 @@ export interface LandingPage {
         id?: string | null;
         blockName?: string | null;
         blockType: 'beforeAfter';
+      }
+    | {
+        titulo?: string | null;
+        perguntas?:
+          | {
+              pergunta: string;
+              resposta: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'faq';
+      }
+    | {
+        tituloSessao?: string | null;
+        membros?:
+          | {
+              nome?: string | null;
+              cro?: string | null;
+              especialidade?: string | null;
+              descricao?: string | null;
+              foto?: (number | null) | Media;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'team';
+      }
+    | {
+        titulo?: string | null;
+        endereco?: string | null;
+        horario?: string | null;
+        mapUrl?: string | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'location';
+      }
+    | {
+        headline?: string | null;
+        nomeProfissional?: string | null;
+        credenciais?: string | null;
+        registro?: string | null;
+        descricao?: string | null;
+        fotoAutoridade?: (number | null) | Media;
+        numerosDeSucesso?:
+          | {
+              numero?: string | null;
+              legenda?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'authority';
       }
   )[];
   meta?: {
@@ -324,6 +408,8 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  nome?: T;
+  role?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -384,6 +470,16 @@ export interface MediaSelect<T extends boolean = true> {
               filesize?: T;
               filename?: T;
             };
+        hero?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
       };
 }
 /**
@@ -394,7 +490,19 @@ export interface TratamentosSelect<T extends boolean = true> {
   titulo?: T;
   slug?: T;
   descricao?: T;
+  beneficios?:
+    | T
+    | {
+        beneficio?: T;
+        id?: T;
+      };
   imagemDestaque?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -423,8 +531,13 @@ export interface LandingPagesSelect<T extends boolean = true> {
           | {
               title?: T;
               subtitle?: T;
-              ctaText?: T;
-              ctaLink?: T;
+              botao?:
+                | T
+                | {
+                    texto?: T;
+                    url?: T;
+                    cor?: T;
+                  };
               image?: T;
               id?: T;
               blockName?: T;
@@ -442,6 +555,7 @@ export interface LandingPagesSelect<T extends boolean = true> {
               features?:
                 | T
                 | {
+                    icone?: T;
                     title?: T;
                     description?: T;
                     id?: T;
@@ -475,9 +589,13 @@ export interface LandingPagesSelect<T extends boolean = true> {
           | T
           | {
               text?: T;
-              url?: T;
-              label?: T;
-              style?: T;
+              botao?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                    style?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -486,16 +604,78 @@ export interface LandingPagesSelect<T extends boolean = true> {
           | {
               title?: T;
               description?: T;
+              tratamentosSelecionados?: T;
               id?: T;
               blockName?: T;
             };
         beforeAfter?:
           | T
           | {
+              layout?: T;
               beforeImage?: T;
               afterImage?: T;
               labelBefore?: T;
               labelAfter?: T;
+              id?: T;
+              blockName?: T;
+            };
+        faq?:
+          | T
+          | {
+              titulo?: T;
+              perguntas?:
+                | T
+                | {
+                    pergunta?: T;
+                    resposta?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        team?:
+          | T
+          | {
+              tituloSessao?: T;
+              membros?:
+                | T
+                | {
+                    nome?: T;
+                    cro?: T;
+                    especialidade?: T;
+                    descricao?: T;
+                    foto?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        location?:
+          | T
+          | {
+              titulo?: T;
+              endereco?: T;
+              horario?: T;
+              mapUrl?: T;
+              id?: T;
+              blockName?: T;
+            };
+        authority?:
+          | T
+          | {
+              headline?: T;
+              nomeProfissional?: T;
+              credenciais?: T;
+              registro?: T;
+              descricao?: T;
+              fotoAutoridade?: T;
+              numerosDeSucesso?:
+                | T
+                | {
+                    numero?: T;
+                    legenda?: T;
+                    id?: T;
+                  };
               id?: T;
               blockName?: T;
             };

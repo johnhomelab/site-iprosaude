@@ -30,7 +30,7 @@ export const seedHome = async (payload: Payload, opts: Opts) => {
       slug: 'home',
       layout: [
         {
-          blockType: 'heroGold',
+          blockType: 'hero-gold',
           title: 'Implantes que Devolvem Seu Sorriso e Sua Confiança',
           subtitle: 'Especialistas em Implantes, Prótese e Urgência 24h.',
           ctaText: 'Agendar Avaliação',
@@ -56,7 +56,7 @@ export const seedHome = async (payload: Payload, opts: Opts) => {
           ],
         },
         {
-          blockType: 'callToAction',
+          blockType: 'cta',
           title: 'Está com dor ou quer transformar seu sorriso?',
           text: 'Fale agora com nossa equipe e agende sua avaliação.',
           buttonText: 'Falar no WhatsApp',

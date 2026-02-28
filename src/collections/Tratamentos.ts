@@ -22,7 +22,7 @@ export const tratamentos: CollectionConfig = {
       unique: true,
       admin: {
         position: 'sidebar', // Fica no cantinho direito
-        description: 'Procedimentos que Realizamos', // O link amigável (ex: implantes-dentarios)
+        description: 'O link amigável (ex: implantes-dentarios)',
       },
     },
     {
@@ -31,10 +31,34 @@ export const tratamentos: CollectionConfig = {
       label: 'Resumo do Procedimento',
     },
     {
+      name: 'beneficios',
+      type: 'array',
+      label: 'Benefícios do Tratamento (Para o paciente)',
+      fields: [
+        {
+          name: 'beneficio',
+          type: 'text',
+          label: 'Ex: Mastigação segura e firme',
+        },
+      ],
+    },
+    {
       name: 'imagemDestaque',
       type: 'upload',
-      relationTo: 'media', // Relaciona com a coleção de Media que já existe
+      relationTo: 'media', // Relaciona com a coleção de Media
       required: false,
+    },
+    {
+      name: 'meta',
+      label: 'SEO para Google Ads',
+      type: 'group',
+      admin: {
+        position: 'sidebar',
+      },
+      fields: [
+        { name: 'title', type: 'text', label: 'Meta Title' },
+        { name: 'description', type: 'textarea', label: 'Meta Description' },
+      ],
     },
   ],
 };

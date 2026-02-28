@@ -8,6 +8,13 @@ export const Features: Block = {
       type: 'array',
       fields: [
         {
+          name: 'icone',
+          type: 'upload',
+          relationTo: 'media',
+          label: 'Ícone ou Imagem',
+          required: false, // Não é obrigatório, caso queira só texto
+        },
+        {
           name: 'title',
           type: 'text',
         },

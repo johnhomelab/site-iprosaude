@@ -8,6 +8,16 @@ export const BeforeAfter: Block = {
   },
   fields: [
     {
+      name: 'layout',
+      type: 'select',
+      defaultValue: 'default',
+      label: 'Alinhamento do Bloco',
+      options: [
+        { label: 'Imagens na Esquerda, Texto na Direita', value: 'default' },
+        { label: 'Imagens na Direita, Texto na Esquerda', value: 'reverse' },
+      ]
+    },
+    {
       type: 'row',
       fields: [
         {

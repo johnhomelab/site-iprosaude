@@ -10,27 +10,25 @@ export const CallToAction: Block = {
     {
       name: 'text',
       type: 'text',
+      label: 'Texto da Chamada (Ex: Volte a sorrir hoje mesmo)',
     },
     {
-      name: 'url',
-      type: 'text',
-    },
-    {
-      name: 'label',
-      type: 'text',
-    },
-    {
-      name: 'style',
-      type: 'select',
-      defaultValue: 'default',
-      options: [
+      name: 'botao',
+      type: 'group',
+      label: 'Configuração do Botão',
+      fields: [
+        { name: 'label', type: 'text', label: 'Texto do Botão' },
+        { name: 'url', type: 'text', label: 'Link do Botão' },
         {
-          label: 'Default',
-          value: 'default',
-        },
-        {
-          label: 'Urgent',
-          value: 'urgent',
+          name: 'style',
+          type: 'select',
+          defaultValue: 'default',
+          label: 'Estilo da Seção',
+          options: [
+            { label: 'Padrão (Azul/Branco)', value: 'default' },
+            { label: 'Urgente (Vermelho - Plantão)', value: 'urgent' },
+            { label: 'Conversão (Verde - WhatsApp)', value: 'whatsapp' },
+          ],
         },
       ],
     },

@@ -32,6 +32,12 @@ export const Media: CollectionConfig = {
         height: undefined,
         position: 'centre',
       },
+      {
+        name: 'hero',
+        width: 1920,
+        height: 1080,
+        position: 'centre', // Ideal para banners de topo de página
+      },
     ],
     adminThumbnail: 'thumbnail',
     mimeTypes: ['image/*'],
