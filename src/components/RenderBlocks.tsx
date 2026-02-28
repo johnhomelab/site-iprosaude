@@ -43,31 +43,44 @@ export const RenderBlocks: React.FC<Props> = ({ layout }) => {
             return <TreatmentListBlock key={key} {...block} />;
           case 'beforeAfter':
             return <BeforeAfterBlock key={key} {...block} />;
-          case 'cta':
-            const ctaBlock = block as any;
-            const isUrgent = ctaBlock.style === 'urgent';
-            const btnClasses = isUrgent
-              ? "inline-block bg-green-600 hover:bg-green-700 text-white font-bold px-10 py-5 text-2xl rounded-full transition-colors shadow-lg transform hover:scale-105"
-              : "inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3 rounded-full transition-colors";
+          
+          case 'cta': {
+  const ctaBlock = block as any;
 
-             return (
-              <div key={key} className={`cta-block p-8 ${isUrgent ? 'bg-red-50' : 'bg-gray-100'} text-center my-8`}>
-                {ctaBlock.text && (
-                   <p className={`mb-4 ${isUrgent ? 'text-xl font-semibold text-red-700' : 'text-lg'}`}>
-                     <SmartText text={ctaBlock.text} />
-                   </p>
-                )}
-                {ctaBlock.url && (
-                    <a href={ctaBlock.url} className={btnClasses}>
-                        {ctaBlock.label ? <SmartText text={ctaBlock.label} /> : 'Click Here'}
-                    </a>
-                )}
-              </div>
-            );
-          default:
-            return null;
-        }
-      })}
+  // compat: novo formato (botao.{label,url,style}) + antigo (label/url/style no topo)
+  const btn = ctaBlock.botao ?? {};
+  const style = (btn.style ?? ctaBlock.style ?? 'default') as string;
+  const url = (btn.url ?? ctaBlock.url ?? '') as string;
+  const label = (btn.label ?? ctaBlock.label ?? '') as string;
+
+  const isUrgent = style === 'urgent';
+  const isWhats = style === 'whatsapp';
+
+  const btnClasses =
+    isUrgent
+      ? 'inline-block px-6 py-3 rounded-lg font-semibold bg-red-600 text-white hover:opacity-90'
+      : isWhats
+        ? 'inline-block px-6 py-3 rounded-lg font-semibold bg-green-600 text-white hover:opacity-90'
+        : 'inline-block px-6 py-3 rounded-lg font-semibold bg-black text-white hover:opacity-90';
+
+  return (
+    <div
+      key={key}
+      className={`cta-block p-8 ${isUrgent ? 'bg-red-50' : 'bg-gray-100'} text-center my-8`}
+    >
+      {ctaBlock.text && (
+        <div className="max-w-3xl mx-auto text-lg">
+          <SmartText text={ctaBlock.text} />
+        </div>
+      )}
+
+      {url && (
+        <div className="mt-6">
+          <a href={url} className={btnClasses}>
+            {label ? <SmartText text={label} /> : 'Falar com a clínica'}
+          </a>
+        </div>
+      )}
     </div>
   );
-};
+}
