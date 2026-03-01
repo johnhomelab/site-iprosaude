@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Settings } from '@/payload-types';
 import { getSettings } from '@/lib/getSettings';
+import './globals.css'
 
 export const dynamic = 'force-dynamic';
 
