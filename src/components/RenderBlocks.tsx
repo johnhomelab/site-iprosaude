@@ -1,3 +1,4 @@
+'use client'; // <-- ESSA LINHA 1 É OBRIGATÓRIA AGORA!
 import React from 'react';
 import { HeroBlock } from './blocks/HeroBlock';
 import { HeroGoldBlock } from './blocks/HeroGoldBlock';
@@ -19,6 +20,17 @@ type Props = {
 };
 
 export const RenderBlocks: React.FC<Props> = ({ layout }) => {
+  // 🌟 A MÁGICA DO TEMPO REAL ACONTECE AQUI 🌟
+  // Esse hook fica "escutando" tudo que você digita lá no painel esquerdo
+  const { data } = useLivePreview({
+    initialData: { layout },
+    serverURL: 'http://192.168.0.220:3010', // <-- COLOQUE O SEU IP EXATO AQUI
+    depth: 2,
+  });
+
+  // Se o painel mandar dados novos enquanto você digita, ele usa. Se não, usa o original.
+  const liveLayout = data?.layout || layout;
+  
   if (!layout || !Array.isArray(layout) || layout.length === 0) {
     return null;
   }
