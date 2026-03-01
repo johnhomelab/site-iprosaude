@@ -27,7 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Page() {
-  const page = await getPageBySlug('urgencia-24h');
+  const page = await getPageBySlug('urgencia');
 
   if (!page) {
     return notFound();
