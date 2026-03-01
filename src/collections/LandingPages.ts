@@ -20,18 +20,6 @@ export const LandingPages: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'title',
-// 👇 ADICIONE AQUI O BLOCO DE LIVE PREVIEW 👇
-    livePreview: {
-      url: ({ data }) => {
-        // Se a página for a principal (slug 'home'), carrega a raiz '/'. 
-        // Se for outra, carrega '/slug-da-pagina'
-        const path = data?.slug === 'home' ? '' : `${data?.slug}`;
-        
-        // Aponta para o seu servidor local onde o Next.js está rodando
-        return `http://192.168.0.220:3010/${path}`;
-      },
-    },
-    // 👆 FIM DO BLOCO DE LIVE PREVIEW 👆
   },
   fields: [
     {

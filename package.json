@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@payloadcms/db-postgres": "beta",
+    "@payloadcms/live-preview-react": "^3.78.0",
     "@payloadcms/next": "beta",
     "@payloadcms/payload-cloud": "beta",
     "@payloadcms/richtext-lexical": "beta",

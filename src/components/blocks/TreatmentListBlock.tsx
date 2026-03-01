@@ -1,3 +1,4 @@
+'use server'; // <-- ADICIONE ESTA LINHA AQUI!
 import React from 'react';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
