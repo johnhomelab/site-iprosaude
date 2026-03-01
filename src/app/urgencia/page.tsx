@@ -9,7 +9,7 @@ import { getPageBySlug } from '@/lib/getPageBySlug';
 export const dynamic = 'force-dynamic';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const page = await getPageBySlug('urgencia-24h');
+  const page = await getPageBySlug('urgencia');
 
   if (!page) {
     return {};
