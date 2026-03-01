@@ -28,7 +28,7 @@ export const LandingPages: CollectionConfig = {
         const path = data?.slug === 'home' ? '' : `${data?.slug}`;
         
         // Aponta para o seu servidor local onde o Next.js está rodando
-        return `http://localhost:3000/${path}`;
+        return `http://192.168.0.220:3010/${path}`;
       },
     },
     // 👆 FIM DO BLOCO DE LIVE PREVIEW 👆
