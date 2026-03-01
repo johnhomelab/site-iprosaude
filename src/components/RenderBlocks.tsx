@@ -47,8 +47,60 @@ export const RenderBlocks: React.FC<Props> = ({ layout }) => {
             return <TreatmentListBlock key={key} {...block} />;
           case 'beforeAfter':
             return <BeforeAfterBlock key={key} {...block} />;
-          case 'cta':
-            return <CallToActionBlock key={key} {...block} />; // Agora ele puxa o arquivo externo!
+          case 'cta': {
+  const ctaBlock = block as any;
+
+  // compat: novo formato (botao.{label,url,style}) + antigo (label/url/style no topo)
+  const btn = ctaBlock.botao ?? {};
+
+  const style = (btn.style ?? ctaBlock.style ?? 'default') as string;
+  const rawUrl = (btn.url ?? ctaBlock.url ?? '') as string;
+  const label = (btn.label ?? ctaBlock.label ?? '') as string;
+
+  const normalizeUrl = (u?: string) => {
+    if (!u) return '';
+    const s = u.trim();
+    if (/^https?:\/\//i.test(s)) return s;
+    if (/^wa\.me\//i.test(s)) return `https://${s}`;
+    if (/^wa\.me/i.test(s)) return `https://${s.replace(/^wa\.me/i, 'wa.me')}`;
+    return s; // permite #ancora
+  };
+
+  const url = normalizeUrl(rawUrl);
+
+  const isUrgent = style === 'urgent';
+  const isWhats = style === 'whatsapp';
+
+  const btnClasses =
+    isUrgent
+      ? 'inline-block px-8 py-4 rounded-full font-bold bg-red-600 text-white hover:opacity-90'
+      : isWhats
+        ? 'inline-block px-8 py-4 rounded-full font-bold bg-green-600 text-white hover:opacity-90'
+        : 'inline-block px-8 py-4 rounded-full font-bold bg-slate-900 text-white hover:opacity-90';
+
+  return (
+    <section
+      key={key}
+      className={`py-16 px-6 transition-colors duration-300 ${
+        isUrgent ? 'bg-red-500' : 'bg-amber-500'
+      }`}
+    >
+      <div className="container mx-auto max-w-5xl flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
+        <h2 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight leading-tight max-w-2xl">
+          {ctaBlock.text ? <SmartText text={ctaBlock.text} /> : 'Fale com a clínica agora'}
+        </h2>
+
+        {url && (
+          <a href={url} className={btnClasses}>
+            {label ? <SmartText text={label} /> : 'Falar no WhatsApp'}
+          </a>
+        )}
+      </div>
+    </section>
+  );
+}
+         // case 'cta':
+         //   return <CallToActionBlock key={key} {...block} />; // Agora ele puxa o arquivo externo!
           case 'authority':
             return <AuthorityBlock key={key} {...block} />; // Pluga a Autoridade
           case 'faq':
