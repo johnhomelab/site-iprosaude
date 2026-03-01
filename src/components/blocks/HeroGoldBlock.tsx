@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import Link from 'next/link';
 import { cn } from '../../lib/utils'; // Remova ou mantenha dependendo se você usa essa função
 import { Media } from '@/payload-types';
 
@@ -95,12 +96,12 @@ export function HeroGoldBlock({ title, subtitle, botao, image }: HeroGoldBlockPr
               transition={{ delay: 0.7 }}
               className="pt-4"
             >
-              <a
+              <Link
                 href={botao.url}
                 className={`inline-block px-8 py-4 font-bold rounded-full transition-all shadow-lg hover:-translate-y-1 ${getButtonStyles(botao.cor)}`}
               >
                 {botao.texto}
-              </a>
+              </Link>
             </motion.div>
           )}
         </motion.div>
