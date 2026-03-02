@@ -18,6 +18,8 @@ services:
       - REDIS_URL=redis://redis:6379
       - PAYLOAD_SECRET=6d824a8fcb75e45621bded4328a9cb02
       - NODE_ENV=production
+      - NEXT_PUBLIC_APP_URL=http://192.168.0.220:3010
+      - NEXT_PUBLIC_PAYLOAD_URL=http://192.168.0.220:3010
     command: >
       sh -c "echo '--- ENV VARS ---';
       env | sed -e 's/DATABASE_URI=.*/DATABASE_URI=******/' -e 's/PAYLOAD_SECRET=.*/PAYLOAD_SECRET=******/';

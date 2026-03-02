@@ -2,6 +2,7 @@ import React from 'react';
 import type { Settings } from '@/payload-types';
 import { getSettings } from '@/lib/getSettings';
 import './globals.css'
+import { LivePreview } from '@/components/LivePreview'
 
 export const dynamic = 'force-dynamic';
 
