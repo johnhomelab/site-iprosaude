@@ -37,7 +37,10 @@ export default async function RootLayout({
          {bodyScripts && (
             <div dangerouslySetInnerHTML={{ __html: bodyScripts }} style={{display:'none'}} />
          )}
+		 <LivePreview />
         <main>{children}</main>
+
+        
       </body>
     </html>
   );
