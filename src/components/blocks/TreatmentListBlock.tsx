@@ -76,7 +76,7 @@ export const TreatmentListBlock = async (props: any) => {
 
                 {/* Botão de Ação Direta para o WhatsApp */}
                 <a
-                  href={`https://wa.me/55S75991904849?text=Olá, vim do site e gostaria de saber mais sobre ${t.titulo}`}
+                  href={`https://wa.me/5575991904849?text=Olá, vim do site e gostaria de saber mais sobre ${t.titulo}`}
                   className="mt-auto inline-flex items-center justify-center w-full px-6 py-4 bg-slate-50 group-hover:bg-amber-500 text-slate-900 font-bold rounded-2xl transition-colors duration-300"
                 >
                   Saber mais
