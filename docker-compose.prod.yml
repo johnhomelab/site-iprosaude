@@ -1,0 +1,43 @@
+services:
+  payload:
+    image: ghcr.io/johnhomelab/site-iprosaude:latest
+    restart: always
+
+    env_file:
+      - .env
+
+    expose:
+      - "3000"
+
+    volumes:
+      - iprosaude_media:/app/media
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+    command: >
+      sh -c "node check-env.js && node server.js"
+
+    networks:
+      - app
+      - traefik_public
+
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik_public
+      - traefik.http.routers.iprosaude.rule=Host(`iprosaude.com.br`)
+      - traefik.http.routers.iprosaude.entrypoints=websecure
+      - traefik.http.routers.iprosaude.tls.certresolver=le
+      - traefik.http.services.iprosaude.loadbalancer.server.port=3000
+
+volumes:
+  iprosaude_media:
+
+networks:
+  app:
+    external: true
+  traefik_public:
+    external: true
