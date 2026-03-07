@@ -2,9 +2,14 @@ import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
 
 export async function up({ payload, req }: MigrateUpArgs): Promise<void> {
   await payload.db.drizzle.execute(sql`
-   CREATE TYPE "public"."enum_landing_pages_blocks_cta_style" AS ENUM('default', 'urgent');
+   CREATE TYPE "public"."enum_users_role" AS ENUM('admin', 'editor');
+  CREATE TYPE "public"."enum_landing_pages_blocks_hero_gold_botao_cor" AS ENUM('verde', 'dourado', 'vermelho');
+  CREATE TYPE "public"."enum_landing_pages_blocks_cta_botao_style" AS ENUM('default', 'urgent', 'whatsapp');
+  CREATE TYPE "public"."enum_landing_pages_blocks_before_after_layout" AS ENUM('default', 'reverse');
   CREATE TABLE IF NOT EXISTS "users" (
   	"id" serial PRIMARY KEY NOT NULL,
+  	"nome" varchar NOT NULL,
+  	"role" "enum_users_role" DEFAULT 'admin',
   	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
   	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
   	"email" varchar NOT NULL,
@@ -47,7 +52,20 @@ export async function up({ payload, req }: MigrateUpArgs): Promise<void> {
   	"sizes_tablet_height" numeric,
   	"sizes_tablet_mime_type" varchar,
   	"sizes_tablet_filesize" numeric,
-  	"sizes_tablet_filename" varchar
+  	"sizes_tablet_filename" varchar,
+  	"sizes_hero_url" varchar,
+  	"sizes_hero_width" numeric,
+  	"sizes_hero_height" numeric,
+  	"sizes_hero_mime_type" varchar,
+  	"sizes_hero_filesize" numeric,
+  	"sizes_hero_filename" varchar
+  );
+  
+  CREATE TABLE IF NOT EXISTS "tratamentos_beneficios" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"beneficio" varchar
   );
   
   CREATE TABLE IF NOT EXISTS "tratamentos" (
@@ -56,6 +74,8 @@ export async function up({ payload, req }: MigrateUpArgs): Promise<void> {
   	"slug" varchar NOT NULL,
   	"descricao" varchar,
   	"imagem_destaque_id" integer,
+  	"meta_title" varchar,
+  	"meta_description" varchar,
   	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
   	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
   );
@@ -78,8 +98,9 @@ export async function up({ payload, req }: MigrateUpArgs): Promise<void> {
   	"id" varchar PRIMARY KEY NOT NULL,
   	"title" varchar NOT NULL,
   	"subtitle" varchar,
-  	"cta_text" varchar,
-  	"cta_link" varchar,
+  	"botao_texto" varchar,
+  	"botao_url" varchar,
+  	"botao_cor" "enum_landing_pages_blocks_hero_gold_botao_cor" DEFAULT 'dourado',
   	"image_id" integer,
   	"block_name" varchar
   );
@@ -97,6 +118,7 @@ export async function up({ payload, req }: MigrateUpArgs): Promise<void> {
   	"_order" integer NOT NULL,
   	"_parent_id" varchar NOT NULL,
   	"id" varchar PRIMARY KEY NOT NULL,
+  	"icone_id" integer,
   	"title" varchar,
   	"description" varchar
   );
@@ -142,9 +164,9 @@ export async function up({ payload, req }: MigrateUpArgs): Promise<void> {
   	"_path" text NOT NULL,
   	"id" varchar PRIMARY KEY NOT NULL,
   	"text" varchar,
-  	"url" varchar,
-  	"label" varchar,
-  	"style" "enum_landing_pages_blocks_cta_style" DEFAULT 'default',
+  	"botao_label" varchar,
+  	"botao_url" varchar,
+  	"botao_style" "enum_landing_pages_blocks_cta_botao_style" DEFAULT 'default',
   	"block_name" varchar
   );
   
@@ -163,10 +185,82 @@ export async function up({ payload, req }: MigrateUpArgs): Promise<void> {
   	"_parent_id" integer NOT NULL,
   	"_path" text NOT NULL,
   	"id" varchar PRIMARY KEY NOT NULL,
+  	"layout" "enum_landing_pages_blocks_before_after_layout" DEFAULT 'default',
   	"before_image_id" integer NOT NULL,
   	"after_image_id" integer NOT NULL,
   	"label_before" varchar DEFAULT 'Antes',
   	"label_after" varchar DEFAULT 'Depois',
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE IF NOT EXISTS "landing_pages_blocks_faq_perguntas" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" varchar NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"pergunta" varchar NOT NULL,
+  	"resposta" varchar NOT NULL
+  );
+  
+  CREATE TABLE IF NOT EXISTS "landing_pages_blocks_faq" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"titulo" varchar DEFAULT 'Perguntas Frequentes',
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE IF NOT EXISTS "landing_pages_blocks_team_membros" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" varchar NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"nome" varchar,
+  	"cro" varchar,
+  	"especialidade" varchar,
+  	"descricao" varchar,
+  	"foto_id" integer
+  );
+  
+  CREATE TABLE IF NOT EXISTS "landing_pages_blocks_team" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"titulo_sessao" varchar DEFAULT 'Conheça nosso Especialista',
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE IF NOT EXISTS "landing_pages_blocks_location" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"titulo" varchar DEFAULT 'Onde Estamos',
+  	"endereco" varchar,
+  	"horario" varchar,
+  	"map_url" varchar,
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE IF NOT EXISTS "landing_pages_blocks_authority_numeros_de_sucesso" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" varchar NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"numero" varchar,
+  	"legenda" varchar
+  );
+  
+  CREATE TABLE IF NOT EXISTS "landing_pages_blocks_authority" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"headline" varchar DEFAULT 'Tecnologia de ponta e especialização em cada sorriso.',
+  	"nome_profissional" varchar DEFAULT 'Dr. John',
+  	"credenciais" varchar DEFAULT 'Cirurgião Dentista Especialista em Implantes e Prótese',
+  	"registro" varchar,
+  	"descricao" varchar,
+  	"foto_autoridade_id" integer,
   	"block_name" varchar
   );
   
@@ -180,6 +274,14 @@ export async function up({ payload, req }: MigrateUpArgs): Promise<void> {
   	"meta_image_id" integer,
   	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
   	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+  );
+  
+  CREATE TABLE IF NOT EXISTS "landing_pages_rels" (
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"order" integer,
+  	"parent_id" integer NOT NULL,
+  	"path" varchar NOT NULL,
+  	"tratamentos_id" integer
   );
   
   CREATE TABLE IF NOT EXISTS "payload_locked_documents" (
@@ -234,6 +336,12 @@ export async function up({ payload, req }: MigrateUpArgs): Promise<void> {
   );
   
   DO $$ BEGIN
+   ALTER TABLE "tratamentos_beneficios" ADD CONSTRAINT "tratamentos_beneficios_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."tratamentos"("id") ON DELETE cascade ON UPDATE no action;
+  EXCEPTION
+   WHEN duplicate_object THEN null;
+  END $$;
+  
+  DO $$ BEGIN
    ALTER TABLE "tratamentos" ADD CONSTRAINT "tratamentos_imagem_destaque_id_media_id_fk" FOREIGN KEY ("imagem_destaque_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   EXCEPTION
    WHEN duplicate_object THEN null;
@@ -265,6 +373,12 @@ export async function up({ payload, req }: MigrateUpArgs): Promise<void> {
   
   DO $$ BEGIN
    ALTER TABLE "landing_pages_blocks_content" ADD CONSTRAINT "landing_pages_blocks_content_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."landing_pages"("id") ON DELETE cascade ON UPDATE no action;
+  EXCEPTION
+   WHEN duplicate_object THEN null;
+  END $$;
+  
+  DO $$ BEGIN
+   ALTER TABLE "landing_pages_blocks_features_features" ADD CONSTRAINT "landing_pages_blocks_features_features_icone_id_media_id_fk" FOREIGN KEY ("icone_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   EXCEPTION
    WHEN duplicate_object THEN null;
   END $$;
@@ -336,7 +450,73 @@ export async function up({ payload, req }: MigrateUpArgs): Promise<void> {
   END $$;
   
   DO $$ BEGIN
+   ALTER TABLE "landing_pages_blocks_faq_perguntas" ADD CONSTRAINT "landing_pages_blocks_faq_perguntas_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."landing_pages_blocks_faq"("id") ON DELETE cascade ON UPDATE no action;
+  EXCEPTION
+   WHEN duplicate_object THEN null;
+  END $$;
+  
+  DO $$ BEGIN
+   ALTER TABLE "landing_pages_blocks_faq" ADD CONSTRAINT "landing_pages_blocks_faq_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."landing_pages"("id") ON DELETE cascade ON UPDATE no action;
+  EXCEPTION
+   WHEN duplicate_object THEN null;
+  END $$;
+  
+  DO $$ BEGIN
+   ALTER TABLE "landing_pages_blocks_team_membros" ADD CONSTRAINT "landing_pages_blocks_team_membros_foto_id_media_id_fk" FOREIGN KEY ("foto_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  EXCEPTION
+   WHEN duplicate_object THEN null;
+  END $$;
+  
+  DO $$ BEGIN
+   ALTER TABLE "landing_pages_blocks_team_membros" ADD CONSTRAINT "landing_pages_blocks_team_membros_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."landing_pages_blocks_team"("id") ON DELETE cascade ON UPDATE no action;
+  EXCEPTION
+   WHEN duplicate_object THEN null;
+  END $$;
+  
+  DO $$ BEGIN
+   ALTER TABLE "landing_pages_blocks_team" ADD CONSTRAINT "landing_pages_blocks_team_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."landing_pages"("id") ON DELETE cascade ON UPDATE no action;
+  EXCEPTION
+   WHEN duplicate_object THEN null;
+  END $$;
+  
+  DO $$ BEGIN
+   ALTER TABLE "landing_pages_blocks_location" ADD CONSTRAINT "landing_pages_blocks_location_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."landing_pages"("id") ON DELETE cascade ON UPDATE no action;
+  EXCEPTION
+   WHEN duplicate_object THEN null;
+  END $$;
+  
+  DO $$ BEGIN
+   ALTER TABLE "landing_pages_blocks_authority_numeros_de_sucesso" ADD CONSTRAINT "landing_pages_blocks_authority_numeros_de_sucesso_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."landing_pages_blocks_authority"("id") ON DELETE cascade ON UPDATE no action;
+  EXCEPTION
+   WHEN duplicate_object THEN null;
+  END $$;
+  
+  DO $$ BEGIN
+   ALTER TABLE "landing_pages_blocks_authority" ADD CONSTRAINT "landing_pages_blocks_authority_foto_autoridade_id_media_id_fk" FOREIGN KEY ("foto_autoridade_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  EXCEPTION
+   WHEN duplicate_object THEN null;
+  END $$;
+  
+  DO $$ BEGIN
+   ALTER TABLE "landing_pages_blocks_authority" ADD CONSTRAINT "landing_pages_blocks_authority_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."landing_pages"("id") ON DELETE cascade ON UPDATE no action;
+  EXCEPTION
+   WHEN duplicate_object THEN null;
+  END $$;
+  
+  DO $$ BEGIN
    ALTER TABLE "landing_pages" ADD CONSTRAINT "landing_pages_meta_image_id_media_id_fk" FOREIGN KEY ("meta_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  EXCEPTION
+   WHEN duplicate_object THEN null;
+  END $$;
+  
+  DO $$ BEGIN
+   ALTER TABLE "landing_pages_rels" ADD CONSTRAINT "landing_pages_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."landing_pages"("id") ON DELETE cascade ON UPDATE no action;
+  EXCEPTION
+   WHEN duplicate_object THEN null;
+  END $$;
+  
+  DO $$ BEGIN
+   ALTER TABLE "landing_pages_rels" ADD CONSTRAINT "landing_pages_rels_tratamentos_fk" FOREIGN KEY ("tratamentos_id") REFERENCES "public"."tratamentos"("id") ON DELETE cascade ON UPDATE no action;
   EXCEPTION
    WHEN duplicate_object THEN null;
   END $$;
@@ -392,6 +572,9 @@ export async function up({ payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX IF NOT EXISTS "media_sizes_thumbnail_sizes_thumbnail_filename_idx" ON "media" USING btree ("sizes_thumbnail_filename");
   CREATE INDEX IF NOT EXISTS "media_sizes_card_sizes_card_filename_idx" ON "media" USING btree ("sizes_card_filename");
   CREATE INDEX IF NOT EXISTS "media_sizes_tablet_sizes_tablet_filename_idx" ON "media" USING btree ("sizes_tablet_filename");
+  CREATE INDEX IF NOT EXISTS "media_sizes_hero_sizes_hero_filename_idx" ON "media" USING btree ("sizes_hero_filename");
+  CREATE INDEX IF NOT EXISTS "tratamentos_beneficios_order_idx" ON "tratamentos_beneficios" USING btree ("_order");
+  CREATE INDEX IF NOT EXISTS "tratamentos_beneficios_parent_id_idx" ON "tratamentos_beneficios" USING btree ("_parent_id");
   CREATE UNIQUE INDEX IF NOT EXISTS "tratamentos_slug_idx" ON "tratamentos" USING btree ("slug");
   CREATE INDEX IF NOT EXISTS "tratamentos_imagem_destaque_idx" ON "tratamentos" USING btree ("imagem_destaque_id");
   CREATE INDEX IF NOT EXISTS "tratamentos_updated_at_idx" ON "tratamentos" USING btree ("updated_at");
@@ -409,6 +592,7 @@ export async function up({ payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX IF NOT EXISTS "landing_pages_blocks_content_path_idx" ON "landing_pages_blocks_content" USING btree ("_path");
   CREATE INDEX IF NOT EXISTS "landing_pages_blocks_features_features_order_idx" ON "landing_pages_blocks_features_features" USING btree ("_order");
   CREATE INDEX IF NOT EXISTS "landing_pages_blocks_features_features_parent_id_idx" ON "landing_pages_blocks_features_features" USING btree ("_parent_id");
+  CREATE INDEX IF NOT EXISTS "landing_pages_blocks_features_features_icone_idx" ON "landing_pages_blocks_features_features" USING btree ("icone_id");
   CREATE INDEX IF NOT EXISTS "landing_pages_blocks_features_order_idx" ON "landing_pages_blocks_features" USING btree ("_order");
   CREATE INDEX IF NOT EXISTS "landing_pages_blocks_features_parent_id_idx" ON "landing_pages_blocks_features" USING btree ("_parent_id");
   CREATE INDEX IF NOT EXISTS "landing_pages_blocks_features_path_idx" ON "landing_pages_blocks_features" USING btree ("_path");
@@ -432,10 +616,34 @@ export async function up({ payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX IF NOT EXISTS "landing_pages_blocks_before_after_path_idx" ON "landing_pages_blocks_before_after" USING btree ("_path");
   CREATE INDEX IF NOT EXISTS "landing_pages_blocks_before_after_before_image_idx" ON "landing_pages_blocks_before_after" USING btree ("before_image_id");
   CREATE INDEX IF NOT EXISTS "landing_pages_blocks_before_after_after_image_idx" ON "landing_pages_blocks_before_after" USING btree ("after_image_id");
+  CREATE INDEX IF NOT EXISTS "landing_pages_blocks_faq_perguntas_order_idx" ON "landing_pages_blocks_faq_perguntas" USING btree ("_order");
+  CREATE INDEX IF NOT EXISTS "landing_pages_blocks_faq_perguntas_parent_id_idx" ON "landing_pages_blocks_faq_perguntas" USING btree ("_parent_id");
+  CREATE INDEX IF NOT EXISTS "landing_pages_blocks_faq_order_idx" ON "landing_pages_blocks_faq" USING btree ("_order");
+  CREATE INDEX IF NOT EXISTS "landing_pages_blocks_faq_parent_id_idx" ON "landing_pages_blocks_faq" USING btree ("_parent_id");
+  CREATE INDEX IF NOT EXISTS "landing_pages_blocks_faq_path_idx" ON "landing_pages_blocks_faq" USING btree ("_path");
+  CREATE INDEX IF NOT EXISTS "landing_pages_blocks_team_membros_order_idx" ON "landing_pages_blocks_team_membros" USING btree ("_order");
+  CREATE INDEX IF NOT EXISTS "landing_pages_blocks_team_membros_parent_id_idx" ON "landing_pages_blocks_team_membros" USING btree ("_parent_id");
+  CREATE INDEX IF NOT EXISTS "landing_pages_blocks_team_membros_foto_idx" ON "landing_pages_blocks_team_membros" USING btree ("foto_id");
+  CREATE INDEX IF NOT EXISTS "landing_pages_blocks_team_order_idx" ON "landing_pages_blocks_team" USING btree ("_order");
+  CREATE INDEX IF NOT EXISTS "landing_pages_blocks_team_parent_id_idx" ON "landing_pages_blocks_team" USING btree ("_parent_id");
+  CREATE INDEX IF NOT EXISTS "landing_pages_blocks_team_path_idx" ON "landing_pages_blocks_team" USING btree ("_path");
+  CREATE INDEX IF NOT EXISTS "landing_pages_blocks_location_order_idx" ON "landing_pages_blocks_location" USING btree ("_order");
+  CREATE INDEX IF NOT EXISTS "landing_pages_blocks_location_parent_id_idx" ON "landing_pages_blocks_location" USING btree ("_parent_id");
+  CREATE INDEX IF NOT EXISTS "landing_pages_blocks_location_path_idx" ON "landing_pages_blocks_location" USING btree ("_path");
+  CREATE INDEX IF NOT EXISTS "landing_pages_blocks_authority_numeros_de_sucesso_order_idx" ON "landing_pages_blocks_authority_numeros_de_sucesso" USING btree ("_order");
+  CREATE INDEX IF NOT EXISTS "landing_pages_blocks_authority_numeros_de_sucesso_parent_id_idx" ON "landing_pages_blocks_authority_numeros_de_sucesso" USING btree ("_parent_id");
+  CREATE INDEX IF NOT EXISTS "landing_pages_blocks_authority_order_idx" ON "landing_pages_blocks_authority" USING btree ("_order");
+  CREATE INDEX IF NOT EXISTS "landing_pages_blocks_authority_parent_id_idx" ON "landing_pages_blocks_authority" USING btree ("_parent_id");
+  CREATE INDEX IF NOT EXISTS "landing_pages_blocks_authority_path_idx" ON "landing_pages_blocks_authority" USING btree ("_path");
+  CREATE INDEX IF NOT EXISTS "landing_pages_blocks_authority_foto_autoridade_idx" ON "landing_pages_blocks_authority" USING btree ("foto_autoridade_id");
   CREATE UNIQUE INDEX IF NOT EXISTS "landing_pages_slug_idx" ON "landing_pages" USING btree ("slug");
   CREATE INDEX IF NOT EXISTS "landing_pages_meta_meta_image_idx" ON "landing_pages" USING btree ("meta_image_id");
   CREATE INDEX IF NOT EXISTS "landing_pages_updated_at_idx" ON "landing_pages" USING btree ("updated_at");
   CREATE INDEX IF NOT EXISTS "landing_pages_created_at_idx" ON "landing_pages" USING btree ("created_at");
+  CREATE INDEX IF NOT EXISTS "landing_pages_rels_order_idx" ON "landing_pages_rels" USING btree ("order");
+  CREATE INDEX IF NOT EXISTS "landing_pages_rels_parent_idx" ON "landing_pages_rels" USING btree ("parent_id");
+  CREATE INDEX IF NOT EXISTS "landing_pages_rels_path_idx" ON "landing_pages_rels" USING btree ("path");
+  CREATE INDEX IF NOT EXISTS "landing_pages_rels_tratamentos_id_idx" ON "landing_pages_rels" USING btree ("tratamentos_id");
   CREATE INDEX IF NOT EXISTS "payload_locked_documents_global_slug_idx" ON "payload_locked_documents" USING btree ("global_slug");
   CREATE INDEX IF NOT EXISTS "payload_locked_documents_updated_at_idx" ON "payload_locked_documents" USING btree ("updated_at");
   CREATE INDEX IF NOT EXISTS "payload_locked_documents_created_at_idx" ON "payload_locked_documents" USING btree ("created_at");
@@ -461,6 +669,7 @@ export async function down({ payload, req }: MigrateDownArgs): Promise<void> {
   await payload.db.drizzle.execute(sql`
    DROP TABLE "users" CASCADE;
   DROP TABLE "media" CASCADE;
+  DROP TABLE "tratamentos_beneficios" CASCADE;
   DROP TABLE "tratamentos" CASCADE;
   DROP TABLE "landing_pages_blocks_hero" CASCADE;
   DROP TABLE "landing_pages_blocks_hero_gold" CASCADE;
@@ -473,12 +682,23 @@ export async function down({ payload, req }: MigrateDownArgs): Promise<void> {
   DROP TABLE "landing_pages_blocks_cta" CASCADE;
   DROP TABLE "landing_pages_blocks_treatment_list" CASCADE;
   DROP TABLE "landing_pages_blocks_before_after" CASCADE;
+  DROP TABLE "landing_pages_blocks_faq_perguntas" CASCADE;
+  DROP TABLE "landing_pages_blocks_faq" CASCADE;
+  DROP TABLE "landing_pages_blocks_team_membros" CASCADE;
+  DROP TABLE "landing_pages_blocks_team" CASCADE;
+  DROP TABLE "landing_pages_blocks_location" CASCADE;
+  DROP TABLE "landing_pages_blocks_authority_numeros_de_sucesso" CASCADE;
+  DROP TABLE "landing_pages_blocks_authority" CASCADE;
   DROP TABLE "landing_pages" CASCADE;
+  DROP TABLE "landing_pages_rels" CASCADE;
   DROP TABLE "payload_locked_documents" CASCADE;
   DROP TABLE "payload_locked_documents_rels" CASCADE;
   DROP TABLE "payload_preferences" CASCADE;
   DROP TABLE "payload_preferences_rels" CASCADE;
   DROP TABLE "payload_migrations" CASCADE;
   DROP TABLE "settings" CASCADE;
-  DROP TYPE "public"."enum_landing_pages_blocks_cta_style";`)
+  DROP TYPE "public"."enum_users_role";
+  DROP TYPE "public"."enum_landing_pages_blocks_hero_gold_botao_cor";
+  DROP TYPE "public"."enum_landing_pages_blocks_cta_botao_style";
+  DROP TYPE "public"."enum_landing_pages_blocks_before_after_layout";`)
 }
