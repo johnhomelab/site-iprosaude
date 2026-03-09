@@ -55,7 +55,7 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URI || '',
     },
-	push: true, // <--- ADICIONE ESTA LINHA (A Chave Mestra)
+	push: false, // <--- ADICIONE ESTA LINHA (A Chave Mestra)
   }),
   sharp,
   plugins: [
