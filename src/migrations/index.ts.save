@@ -1,0 +1,21 @@
+import * as migration_20260307_102210 from './20260307_102210';
+';
+import * as migration_20260309_151812 from './20260309_151812';
+
+export const migrations = [
+  {
+    up: migration_20260307_102210.up,
+    down: migration_20260307_102210.down,
+    name: '20260307_102210',
+  },
+  {
+    up: migration_20260309_000000_schema_checkpoint.up,
+    down: migration_20260309_000000_schema_checkpoint.down,
+    name: '20260309_000000_schema_checkpoint',
+  },
+  {
+    up: migration_20260309_151812.up,
+    down: migration_20260309_151812.down,
+    name: '20260309_151812'
+  },
+];

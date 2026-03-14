@@ -1,15 +1,21 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
-import { RenderBlocks } from '../../components/RenderBlocks';
-import { FloatingWhatsApp } from '../../components/FloatingWhatsApp';
+import { RenderBlocks } from '@/components/RenderBlocks';
+import { FloatingWhatsApp } from '@/components/FloatingWhatsApp';
+import { trackPageVisit } from '@/lib/tracking';
 import { Metadata } from 'next';
 import { getSettings } from '@/lib/getSettings';
 import { getPageBySlug } from '@/lib/getPageBySlug';
 
 export const dynamic = 'force-dynamic';
 
-export async function generateMetadata(): Promise<Metadata> {
-  const page = await getPageBySlug('urgencia');
+type Props = {
+  params: Promise<{ slug: string }>;
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const page = await getPageBySlug(slug);
 
   if (!page) {
     return {};
@@ -26,12 +32,16 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function Page() {
-  const page = await getPageBySlug('urgencia');
+export default async function Page({ params }: Props) {
+  const { slug } = await params;
+  const page = await getPageBySlug(slug);
 
   if (!page) {
     return notFound();
   }
+
+  // Server-side tracking
+  await trackPageVisit(slug);
 
   const settings = await getSettings();
 

@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload';
 import { Hero } from '../blocks/Hero';
 import { Content } from '../blocks/Content';
+import { FormLeadBlock } from '../blocks/FormLeadBlock'
 import { Features } from '../blocks/Features';
 import { BeforeAfter } from '../blocks/BeforeAfter';
 import { Form } from '../blocks/Form';
@@ -58,6 +59,7 @@ export const LandingPages: CollectionConfig = {
         Testimonials,
         Form,
         CallToAction,
+        FormLeadBlock,
         TreatmentList,
         BeforeAfter,
         Faq,

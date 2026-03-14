@@ -15,6 +15,7 @@ export interface Config {
     media: Media;
     tratamentos: Tratamento;
     'landing-pages': LandingPage;
+    leads: Lead;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -25,6 +26,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     tratamentos: TratamentosSelect<false> | TratamentosSelect<true>;
     'landing-pages': LandingPagesSelect<false> | LandingPagesSelect<true>;
+    leads: LeadsSelect<false> | LeadsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -33,9 +35,13 @@ export interface Config {
     defaultIDType: number;
   };
   globals: {
+    'header-settings': HeaderSetting;
+    'footer-settings': FooterSetting;
     settings: Settings;
   };
   globalsSelect: {
+    'header-settings': HeaderSettingsSelect<false> | HeaderSettingsSelect<true>;
+    'footer-settings': FooterSettingsSelect<false> | FooterSettingsSelect<true>;
     settings: SettingsSelect<false> | SettingsSelect<true>;
   };
   locale: null;
@@ -258,6 +264,14 @@ export interface LandingPage {
     | {
         title?: string | null;
         description?: string | null;
+        buttonText?: string | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'formLead';
+      }
+    | {
+        title?: string | null;
+        description?: string | null;
         tratamentosSelecionados?: (number | Tratamento)[] | null;
         id?: string | null;
         blockName?: string | null;
@@ -340,6 +354,20 @@ export interface LandingPage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "leads".
+ */
+export interface Lead {
+  id: number;
+  name: string;
+  phone: string;
+  whatsapp?: string | null;
+  isUrgent?: boolean | null;
+  message?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -360,6 +388,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'landing-pages';
         value: number | LandingPage;
+      } | null)
+    | ({
+        relationTo: 'leads';
+        value: number | Lead;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -599,6 +631,15 @@ export interface LandingPagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        formLead?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              buttonText?: T;
+              id?: T;
+              blockName?: T;
+            };
         treatmentList?:
           | T
           | {
@@ -692,6 +733,19 @@ export interface LandingPagesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "leads_select".
+ */
+export interface LeadsSelect<T extends boolean = true> {
+  name?: T;
+  phone?: T;
+  whatsapp?: T;
+  isUrgent?: T;
+  message?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents_select".
  */
 export interface PayloadLockedDocumentsSelect<T extends boolean = true> {
@@ -724,6 +778,49 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "header-settings".
+ */
+export interface HeaderSetting {
+  id: number;
+  logoTextPrimary: string;
+  logoTextHighlight: string;
+  logoImage?: (number | null) | Media;
+  showWhatsappButton?: boolean | null;
+  whatsappNumber?: string | null;
+  whatsappButtonText?: string | null;
+  menuItems?:
+    | {
+        label: string;
+        href: string;
+        highlight?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer-settings".
+ */
+export interface FooterSetting {
+  id: number;
+  clinicName: string;
+  responsible: string;
+  cro: string;
+  cnpj: string;
+  specialty?: string | null;
+  phone: string;
+  phoneFormatted: string;
+  address: string;
+  mapsQuery?: string | null;
+  instagramUrl?: string | null;
+  siteUrl?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "settings".
  */
 export interface Settings {
@@ -737,6 +834,49 @@ export interface Settings {
   };
   updatedAt?: string | null;
   createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "header-settings_select".
+ */
+export interface HeaderSettingsSelect<T extends boolean = true> {
+  logoTextPrimary?: T;
+  logoTextHighlight?: T;
+  logoImage?: T;
+  showWhatsappButton?: T;
+  whatsappNumber?: T;
+  whatsappButtonText?: T;
+  menuItems?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        highlight?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer-settings_select".
+ */
+export interface FooterSettingsSelect<T extends boolean = true> {
+  clinicName?: T;
+  responsible?: T;
+  cro?: T;
+  cnpj?: T;
+  specialty?: T;
+  phone?: T;
+  phoneFormatted?: T;
+  address?: T;
+  mapsQuery?: T;
+  instagramUrl?: T;
+  siteUrl?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

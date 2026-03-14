@@ -6,7 +6,7 @@ export const FloatingWhatsApp = ({ number }: { number?: string | null }) => {
   if (!number) return null;
 
   const cleanNumber = number.replace(/\D/g, '');
-  const url = `https://wa.me/${cleanNumber}`;
+  const url = `https://wa.me/${cleanNumber}?text=Gostaria%20de%20agendar%20uma%20consulta!`;
 
   return (
     <a

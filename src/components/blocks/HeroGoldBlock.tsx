@@ -1,10 +1,32 @@
 'use client';
-
+import React from 'react';
+import { TimeTrigger } from '@/components/ui/TimeTrigger'
+import { DateTrigger } from '@/components/ui/DateTrigger'
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { cn } from '../../lib/utils'; // Remova ou mantenha dependendo se você usa essa função
 import { Media } from '@/payload-types';
+
+
+// Função texto magico
+function renderTextWithTriggers(text?: string) {
+  if (!text) return null
+
+  const parts = text.split(/(\[DATE\]|\[TIME\])/g)
+
+  return parts.map((part, index) => {
+    if (part === '[DATE]') {
+      return <DateTrigger key={`date-${index}`} />
+    }
+
+    if (part === '[TIME]') {
+      return <TimeTrigger key={`time-${index}`} />
+    }
+
+    return <React.Fragment key={`text-${index}`}>{part}</React.Fragment>
+  })
+}
 
 // 1. Atualizamos a interface para receber o Grupo "botao" exato que criamos no Payload
 interface HeroGoldBlockProps {
@@ -29,12 +51,12 @@ export function HeroGoldBlock({ title, subtitle, botao, image }: HeroGoldBlockPr
   const getButtonStyles = (cor?: string) => {
     switch (cor) {
       case 'verde':
-        return 'bg-green-600 hover:bg-green-500 text-white shadow-green-600/50';
+        return 'bg-green-600 hover:bg-green-500 text-white shadow-green-600/50 text-xl animate-pulse';
       case 'vermelho':
         return 'bg-red-600 hover:bg-red-500 text-white shadow-red-600/50 text-xl animate-pulse'; // Destaque extra para plantão 24h
       case 'dourado':
       default:
-        return 'bg-yellow-500 hover:bg-yellow-400 text-black shadow-yellow-500/50';
+        return 'bg-yellow-500 hover:bg-yellow-400 text-black shadow-yellow-500/50 text-xl animate-pulse';
     }
   };
 
@@ -84,7 +106,7 @@ export function HeroGoldBlock({ title, subtitle, botao, image }: HeroGoldBlockPr
               transition={{ delay: 0.5 }}
               className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto font-light"
             >
-              {subtitle}
+              {renderTextWithTriggers(subtitle)}
             </motion.p>
           )}
 

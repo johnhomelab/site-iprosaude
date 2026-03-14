@@ -2,16 +2,19 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { Leads } from './collections/Leads'
 import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
-
+import { HeaderSettings } from './globals/HeaderSettings'
+import { FooterSettings } from './globals/FooterSettings';
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { tratamentos } from './collections/Tratamentos'
 import { LandingPages } from './collections/LandingPages'
 import { Settings } from './globals/Settings'
+import { migrations } from './migrations'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -33,6 +36,7 @@ export default buildConfig({
       // fallback
       return '/'
     },
+
     breakpoints: [
       { label: 'Mobile', name: 'mobile', width: 390, height: 844 },
       { label: 'Tablet', name: 'tablet', width: 768, height: 1024 },
@@ -44,8 +48,17 @@ export default buildConfig({
     admin: "/cms/admin",
     api: "/cms/api",
   },
-  collections: [Users, Media, tratamentos, LandingPages],
-  globals: [Settings],
+  
+  
+  // 👇 GLOBALS DEVE FICAR AQUI, NA RAIZ DO BUILDCONFIG 👇
+  globals: [
+    HeaderSettings,
+    FooterSettings,
+    Settings, // Adicionei o Settings aqui já que você o importou no topo
+  ],
+  
+  
+  collections: [Users, Media, tratamentos, LandingPages, Leads],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -55,7 +68,8 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URI || '',
     },
-	push: false, // <--- ADICIONE ESTA LINHA (A Chave Mestra)
+    prodMigrations: migrations,
+    push: false,
   }),
   sharp,
   plugins: [

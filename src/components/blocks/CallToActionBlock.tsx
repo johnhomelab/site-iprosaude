@@ -1,5 +1,26 @@
 import React from 'react';
 import { SmartText } from '../SmartText';
+import { TimeTrigger } from '@/components/ui/TimeTrigger'
+import { DateTrigger } from '@/components/ui/DateTrigger'
+
+// Função texto magico
+function renderTextWithTriggers(text?: string) {
+  if (!text) return null
+
+  const parts = text.split(/(\[DATE\]|\[TIME\])/g)
+
+  return parts.map((part, index) => {
+    if (part === '[DATE]') {
+      return <DateTrigger key={`date-${index}`} />
+    }
+
+    if (part === '[TIME]') {
+      return <TimeTrigger key={`time-${index}`} />
+    }
+
+    return <React.Fragment key={`text-${index}`}>{part}</React.Fragment>
+  })
+}
 
 export const CallToActionBlock: React.FC<any> = (props) => {
   // 1. Rastreador do Texto Principal: Busca em todas as variações comuns
@@ -16,16 +37,16 @@ export const CallToActionBlock: React.FC<any> = (props) => {
   
   let bgColor = 'bg-amber-500';
   let textColor = 'text-slate-900';
-  let buttonStyle = 'bg-slate-950 text-white hover:bg-slate-800';
+  let buttonStyle = 'bg-slate-950 text-white hover:bg-slate-800 text-xl animate-pulse';
 
   if (isUrgent) {
     bgColor = 'bg-red-600';
     textColor = 'text-white';
-    buttonStyle = 'bg-white text-red-600 hover:bg-slate-100';
+    buttonStyle = 'bg-white text-red-600 hover:bg-slate-100 text-xl animate-pulse';
   } else if (isWhats) {
     bgColor = 'bg-green-600';
     textColor = 'text-white';
-    buttonStyle = 'bg-white text-green-700 hover:bg-slate-100';
+    buttonStyle = 'bg-white text-green-700 hover:bg-slate-100 text-xl animate-pulse';
   }
 
   return (
@@ -34,7 +55,7 @@ export const CallToActionBlock: React.FC<any> = (props) => {
         
         {/* Texto da Chamada */}
         <h2 className={`text-3xl md:text-4xl font-bold ${textColor} tracking-tight leading-tight max-w-2xl`}>
-          {mainText ? <SmartText text={mainText} /> : 'Pronto para voltar a sorrir?'}
+          {mainText ? renderTextWithTriggers(mainText) : 'Pronto para voltar a sorrir?'}
         </h2>
         
         {/* Botão com Link */}
