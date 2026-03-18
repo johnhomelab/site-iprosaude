@@ -1,3 +1,4 @@
+import '../globals.css'
 import React from 'react'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
@@ -6,6 +7,7 @@ import { Footer } from '@/components/Footer'
 import { LivePreview } from '@/components/LivePreview'
 import { getSettings } from '@/lib/getSettings'
 import Script from 'next/script'
+
 
 export default async function SiteLayout({
   children,
@@ -25,25 +27,27 @@ export default async function SiteLayout({
 
 
   return (
-    <>
+  <html lang="en">
+    <body>
       {headerScripts && (
-  <Script
-    id="payload-header-scripts"
-    strategy="afterInteractive"
-    dangerouslySetInnerHTML={{ __html: headerScripts }}
-  />
-)}
+        <Script
+          id="payload-header-scripts"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{ __html: headerScripts }}
+        />
+      )}
       {bodyScripts && (
-  <Script
-    id="payload-body-scripts"
-    strategy="afterInteractive"
-    dangerouslySetInnerHTML={{ __html: bodyScripts }}
-  />
-)}
+        <Script
+          id="payload-body-scripts"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{ __html: bodyScripts }}
+        />
+      )}
       <LivePreview />
       <Header data={headerData} />
       {children}
       <Footer />
-    </>
-  )
+    </body>
+  </html>
+)
 }

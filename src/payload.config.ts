@@ -16,6 +16,7 @@ import { LandingPages } from './collections/LandingPages'
 import { Settings } from './globals/Settings'
 import { migrations } from './migrations'
 
+
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
@@ -25,6 +26,16 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    components: {
+  graphics: {
+    Logo: {
+      path: './components/admin/Logo#Logo',
+    },
+    Icon: {
+      path: './components/admin/Icon#Icon',
+    },
+  },
+},
     livePreview: {
     url: ({ data, collectionConfig }) => {
       // landing-pages: slug home => "/"
