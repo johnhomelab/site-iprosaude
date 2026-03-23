@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import config from '@payload-config'
 import { RootPage } from '@payloadcms/next/views'
 import { importMap } from '../../cms/admin/importMap'
