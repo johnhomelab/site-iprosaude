@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 import '../globals.css'
 import React from 'react'
 import { getPayload } from 'payload'
