@@ -3,89 +3,128 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 
-export const BeforeAfterBlock = (props: any) => {
-  const { beforeImage, afterImage, labelBefore, labelAfter } = props;
+// ------------------------------------------------------------------
+// SUBCOMPONENTE: O Slider Individual (Cada foto tem sua própria vida)
+// ------------------------------------------------------------------
+const SliderItem = ({ beforeUrl, afterUrl, labelBefore, labelAfter }: any) => {
   const [sliderPosition, setSliderPosition] = useState(50);
 
+  return (
+    <div className="relative w-full aspect-[4/3] md:aspect-video rounded-3xl overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.4)] border border-slate-800 select-none group bg-slate-900">
+      
+      {/* Imagem de Fundo (Depois) */}
+      <Image
+        src={afterUrl}
+        alt={labelAfter || "Depois"}
+        fill
+        className="object-cover"
+        sizes="(max-width: 1024px) 100vw, 1024px"
+      />
+
+      {/* Imagem da Frente (Antes) com recorte dinâmico */}
+      <Image
+        src={beforeUrl}
+        alt={labelBefore || "Antes"}
+        fill
+        className="object-cover z-10"
+        style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
+        sizes="(max-width: 1024px) 100vw, 1024px"
+      />
+
+      {/* Linha Divisória e Botão Dourado */}
+      <div
+        className="absolute top-0 bottom-0 w-1 bg-amber-500 z-20 pointer-events-none shadow-[0_0_15px_rgba(245,158,11,0.5)]"
+        style={{ left: `${sliderPosition}%` }}
+      >
+         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-950 border-2 border-amber-500 rounded-full p-2.5 shadow-[0_0_20px_rgba(245,158,11,0.4)] text-amber-500 transition-transform group-hover:scale-110">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" transform="rotate(-90 12 12)" />
+            </svg>
+         </div>
+      </div>
+
+      {/* Input Invisível para Arrastar */}
+      <input
+        type="range"
+        min="0"
+        max="100"
+        value={sliderPosition}
+        onChange={(e) => setSliderPosition(Number(e.target.value))}
+        className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize z-30 m-0 p-0"
+      />
+
+      {/* Etiquetas Antes/Depois */}
+      <div className="absolute bottom-6 left-6 z-20 bg-slate-950/80 border border-slate-700 text-white px-4 py-1.5 rounded-full text-sm font-bold tracking-wide backdrop-blur-md pointer-events-none shadow-lg">
+        {labelBefore || 'Antes'}
+      </div>
+      <div className="absolute bottom-6 right-6 z-20 bg-amber-500/90 border border-amber-400 text-slate-950 px-4 py-1.5 rounded-full text-sm font-bold tracking-wide backdrop-blur-md pointer-events-none shadow-lg shadow-amber-500/20">
+        {labelAfter || 'Depois'}
+      </div>
+    </div>
+  );
+};
+
+// ------------------------------------------------------------------
+// COMPONENTE PRINCIPAL: Lê o banco de dados e cria a lista
+// ------------------------------------------------------------------
+export const BeforeAfterBlock = (props: any) => {
+  const { title, description, labelBefore, labelAfter, comparisons } = props;
+
+  // Função utilitária para extrair a URL da imagem
   const getUrl = (img: any) => {
     if (img && typeof img === 'object' && img.url) return img.url;
     return null;
   };
 
-  const beforeUrl = getUrl(beforeImage);
-  const afterUrl = getUrl(afterImage);
+  // Se não houver lista de fotos, esconde o bloco
+  if (!comparisons || comparisons.length === 0) return null;
 
-  if (!beforeUrl || !afterUrl) return null;
+  // Lógica para separar o título no primeiro ponto final (Ex: "Resultados Reais. Transformações Reais.")
+  // Isso mantém o seu design maravilhoso de duas cores intacto, mesmo se você mudar o texto no painel!
+  const titleParts = title ? title.split('.') : [];
+  const firstPart = titleParts.length > 0 ? titleParts[0] + (titleParts.length > 1 ? '.' : '') : '';
+  const secondPart = titleParts.slice(1).join('.');
 
   return (
     <section className="py-24 bg-slate-950 relative overflow-hidden">
-      {/* Brilho de fundo sutil (Efeito Premium) */}
+      {/* Brilho de fundo sutil */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-500/5 rounded-full blur-[120px] pointer-events-none"></div>
 
       <div className="container mx-auto px-4 max-w-5xl relative z-10">
         
-        {/* Cabeçalho Emocional de Conversão */}
+        {/* Cabeçalho Emocional de Conversão (Aparece 1 vez só) */}
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-5xl font-bold text-white mb-6 tracking-tight">
-            Resultados Reais. <span className="text-amber-500">Transformações Reais.</span>
+            {firstPart} <span className="text-amber-500">{secondPart}</span>
           </h2>
-          <p className="text-slate-400 text-lg md:text-xl font-light max-w-2xl mx-auto">
-            Arraste a linha central para os lados e veja a diferença que a precisão e a tecnologia avançada podem fazer pelo seu sorriso.
-          </p>
+          {description && (
+            <p className="text-slate-400 text-lg md:text-xl font-light max-w-2xl mx-auto">
+              {description}
+            </p>
+          )}
         </div>
 
-        {/* Container do Slider */}
-        <div className="relative w-full aspect-[4/3] md:aspect-video rounded-3xl overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.4)] border border-slate-800 select-none group bg-slate-900">
-          
-          {/* After Image (Fundo - Lado Direito) */}
-          <Image
-            src={afterUrl}
-            alt={labelAfter || "Depois"}
-            fill
-            className="object-cover"
-            sizes="(max-width: 1024px) 100vw, 1024px"
-          />
+        {/* Lista de Sliders Empilhados */}
+        <div className="flex flex-col gap-12 md:gap-16">
+          {comparisons.map((item: any, index: number) => {
+            const beforeUrl = getUrl(item.beforeImage);
+            const afterUrl = getUrl(item.afterImage);
 
-          {/* Before Image (Frente - Lado Esquerdo com recorte dinâmico) */}
-          <Image
-            src={beforeUrl}
-            alt={labelBefore || "Antes"}
-            fill
-            className="object-cover z-10"
-            style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
-            sizes="(max-width: 1024px) 100vw, 1024px"
-          />
+            // Só renderiza se as duas imagens existirem
+            if (!beforeUrl || !afterUrl) return null;
 
-          {/* Linha Divisória e Botão (Cor Dourada Premium) */}
-          <div
-            className="absolute top-0 bottom-0 w-1 bg-amber-500 z-20 pointer-events-none shadow-[0_0_15px_rgba(245,158,11,0.5)]"
-            style={{ left: `${sliderPosition}%` }}
-          >
-             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-950 border-2 border-amber-500 rounded-full p-2.5 shadow-[0_0_20px_rgba(245,158,11,0.4)] text-amber-500 transition-transform group-hover:scale-110">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" transform="rotate(-90 12 12)" />
-                </svg>
-             </div>
-          </div>
-
-          {/* Input Invisível para Arrastar */}
-          <input
-            type="range"
-            min="0"
-            max="100"
-            value={sliderPosition}
-            onChange={(e) => setSliderPosition(Number(e.target.value))}
-            className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize z-30 m-0 p-0"
-          />
-
-          {/* Tags "Antes" e "Depois" Redesenhadas */}
-          <div className="absolute bottom-6 left-6 z-20 bg-slate-950/80 border border-slate-700 text-white px-4 py-1.5 rounded-full text-sm font-bold tracking-wide backdrop-blur-md pointer-events-none shadow-lg">
-            {labelBefore || 'Antes'}
-          </div>
-          <div className="absolute bottom-6 right-6 z-20 bg-amber-500/90 border border-amber-400 text-slate-950 px-4 py-1.5 rounded-full text-sm font-bold tracking-wide backdrop-blur-md pointer-events-none shadow-lg shadow-amber-500/20">
-            {labelAfter || 'Depois'}
-          </div>
+            return (
+              <SliderItem 
+                key={index}
+                beforeUrl={beforeUrl}
+                afterUrl={afterUrl}
+                labelBefore={labelBefore}
+                labelAfter={labelAfter}
+              />
+            );
+          })}
         </div>
+
       </div>
     </section>
   );

@@ -278,11 +278,18 @@ export interface LandingPage {
         blockType: 'treatmentList';
       }
     | {
-        layout?: ('default' | 'reverse') | null;
-        beforeImage: number | Media;
-        afterImage: number | Media;
+        title?: string | null;
+        description?: string | null;
+        layout?: ('default' | 'reverse' | 'center') | null;
         labelBefore?: string | null;
         labelAfter?: string | null;
+        comparisons?:
+          | {
+              beforeImage: number | Media;
+              afterImage: number | Media;
+              id?: string | null;
+            }[]
+          | null;
         id?: string | null;
         blockName?: string | null;
         blockType: 'beforeAfter';
@@ -652,11 +659,18 @@ export interface LandingPagesSelect<T extends boolean = true> {
         beforeAfter?:
           | T
           | {
+              title?: T;
+              description?: T;
               layout?: T;
-              beforeImage?: T;
-              afterImage?: T;
               labelBefore?: T;
               labelAfter?: T;
+              comparisons?:
+                | T
+                | {
+                    beforeImage?: T;
+                    afterImage?: T;
+                    id?: T;
+                  };
               id?: T;
               blockName?: T;
             };
