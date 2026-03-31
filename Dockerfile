@@ -19,7 +19,6 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ARG PAYLOAD_SECRET=dummy_secret_for_build
 ARG DATABASE_URI=postgres://dummy:5432/dummy
 
-RUN npx payload generate:importmap
 RUN NEXT_OUTPUT_TYPE=standalone npm run build
 
 FROM base AS runner
