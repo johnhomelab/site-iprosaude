@@ -1,15 +1,13 @@
 import React from 'react';
 import { MapPin, Phone, Instagram, MessageCircle } from 'lucide-react';
-import { getPayload } from 'payload';
-import configPromise from '@payload-config';
+import { getFooterSettings } from '@/lib/getFooterSettings';
 import { BackToTop } from './BackToTop'; // Importamos o botão que criamos
 
 export const Footer = async () => {
   const currentYear = new Date().getFullYear();
 
-  // Conecta ao banco de dados e busca as configurações da clínica
-  const payload = await getPayload({ config: configPromise });
-  const clinicData = await payload.findGlobal({ slug: 'footer-settings' });
+  // Conecta ao banco de dados e busca as configurações da clínica através do cache
+  const clinicData = await getFooterSettings();
 
   // Valores de fallback (segurança) caso o painel esteja vazio na primeira vez
   const safeData = {

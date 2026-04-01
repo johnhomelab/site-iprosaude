@@ -1,12 +1,11 @@
 export const dynamic = 'force-dynamic'
 import '../globals.css'
 import React from 'react'
-import { getPayload } from 'payload'
-import configPromise from '@payload-config'
 import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
 import { LivePreview } from '@/components/LivePreview'
 import { getSettings } from '@/lib/getSettings'
+import { getHeaderSettings } from '@/lib/getHeaderSettings'
 import Script from 'next/script'
 
 
@@ -23,8 +22,7 @@ export default async function SiteLayout({
   const bodyScripts = settings?.analytics?.bodyScripts
 
 
-  const payload = await getPayload({ config: configPromise })
-  const headerData = await payload.findGlobal({ slug: 'header-settings' })
+  const headerData = canLoadSettings ? await getHeaderSettings() : null
 
 
   return (
