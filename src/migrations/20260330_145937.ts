@@ -2,24 +2,32 @@ import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
 
 export async function up({ payload, req }: MigrateUpArgs): Promise<void> {
   await payload.db.drizzle.execute(sql`
-   ALTER TABLE "landing_pages_blocks_before_after_comparisons_comparisons" DISABLE ROW LEVEL SECURITY;
-  DROP TABLE "landing_pages_blocks_before_after_comparisons_comparisons" CASCADE;
-  ALTER TABLE "landing_pages_blocks_before_after_comparisons" ADD COLUMN "before_image_id" integer NOT NULL;
-  ALTER TABLE "landing_pages_blocks_before_after_comparisons" ADD COLUMN "after_image_id" integer NOT NULL;
+  DO $$
+  BEGIN
+    IF to_regclass('public.landing_pages_blocks_before_after_comparisons_comparisons') IS NOT NULL THEN
+      EXECUTE 'ALTER TABLE "landing_pages_blocks_before_after_comparisons_comparisons" DISABLE ROW LEVEL SECURITY';
+      EXECUTE 'DROP TABLE "landing_pages_blocks_before_after_comparisons_comparisons" CASCADE';
+    END IF;
+  END $$;
+
+  ALTER TABLE "landing_pages_blocks_before_after_comparisons" ADD COLUMN IF NOT EXISTS "before_image_id" integer;
+  ALTER TABLE "landing_pages_blocks_before_after_comparisons" ADD COLUMN IF NOT EXISTS "after_image_id" integer;
+
   DO $$ BEGIN
    ALTER TABLE "landing_pages_blocks_before_after_comparisons" ADD CONSTRAINT "landing_pages_blocks_before_after_comparisons_before_image_id_media_id_fk" FOREIGN KEY ("before_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   EXCEPTION
    WHEN duplicate_object THEN null;
   END $$;
-  
+
   DO $$ BEGIN
    ALTER TABLE "landing_pages_blocks_before_after_comparisons" ADD CONSTRAINT "landing_pages_blocks_before_after_comparisons_after_image_id_media_id_fk" FOREIGN KEY ("after_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   EXCEPTION
    WHEN duplicate_object THEN null;
   END $$;
-  
+
   CREATE INDEX IF NOT EXISTS "landing_pages_blocks_before_after_comparisons_before_image_idx" ON "landing_pages_blocks_before_after_comparisons" USING btree ("before_image_id");
-  CREATE INDEX IF NOT EXISTS "landing_pages_blocks_before_after_comparisons_after_image_idx" ON "landing_pages_blocks_before_after_comparisons" USING btree ("after_image_id");`)
+  CREATE INDEX IF NOT EXISTS "landing_pages_blocks_before_after_comparisons_after_image_idx" ON "landing_pages_blocks_before_after_comparisons" USING btree ("after_image_id");
+  `)
 }
 
 export async function down({ payload, req }: MigrateDownArgs): Promise<void> {
