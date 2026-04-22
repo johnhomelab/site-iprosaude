@@ -3,7 +3,6 @@
 import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { usePathname } from 'next/navigation'
 
 type HeaderMenuItem = {
   label?: string
@@ -31,7 +30,6 @@ type HeaderProps = {
 export const Header = ({ data }: HeaderProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false)
   const [isScrolled, setIsScrolled] = React.useState(false)
-  const pathname = usePathname()
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -43,10 +41,6 @@ export const Header = ({ data }: HeaderProps) => {
 
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
-
-  if (pathname === '/urgencia') {
-    return null
-  }
 
   const menuItems =
     data?.menuItems && data.menuItems.length > 0

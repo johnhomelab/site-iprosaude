@@ -175,6 +175,7 @@ export interface LandingPage {
   title: string;
   slug: string;
   showFloatingButton?: boolean | null;
+  showHeader?: boolean | null;
   layout: (
     | {
         heading: string;
@@ -553,6 +554,7 @@ export interface LandingPagesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   showFloatingButton?: T;
+  showHeader?: T;
   layout?:
     | T
     | {

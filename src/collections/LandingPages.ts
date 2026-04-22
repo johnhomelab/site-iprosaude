@@ -48,6 +48,13 @@ export const LandingPages: CollectionConfig = {
       defaultValue: true,
     },
     {
+      name: 'showHeader',
+      type: 'checkbox',
+      label: 'Show Header',
+      admin: { position: 'sidebar' },
+      defaultValue: true,
+    },
+    {
       name: 'layout',
       type: 'blocks',
       required: true,
