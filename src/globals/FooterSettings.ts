@@ -2,7 +2,7 @@ import type { GlobalConfig } from 'payload';
 
 export const FooterSettings: GlobalConfig = {
   slug: 'footer-settings',
-  label: 'Configurações da Clínica', // Nome que vai aparecer no menu do painel
+  label: '🏥Configurações da Clínica', // Nome que vai aparecer no menu do painel
   access: {
     read: () => true, // Permite que o site leia essas informações
   },

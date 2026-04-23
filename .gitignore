@@ -3,3 +3,6 @@ node_modules
 .next
 dist
 build
+
+media/
+tsconfig.tsbuildinfo

@@ -1,7 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
 export const Users: CollectionConfig = {
-  slug: 'users',
+  slug: '🧑🏻‍💻users',
   admin: {
     useAsTitle: 'nome', // Mudamos para mostrar o Nome na lista, não o email
   },

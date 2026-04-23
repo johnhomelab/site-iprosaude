@@ -24,6 +24,21 @@ export const Leads: CollectionConfig = {
       required: true,
     },
     {
+      name: 'email',
+      type: 'email',
+      label: 'Email',
+    },
+    {
+      name: 'pageSlug',
+      type: 'text',
+      label: 'Page Slug',
+    },
+    {
+      name: 'source',
+      type: 'text',
+      label: 'Source',
+    },
+    {
       name: 'whatsapp',
       type: 'text',
       label: 'WhatsApp',

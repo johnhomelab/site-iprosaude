@@ -2,8 +2,32 @@
 
 import React, { useState } from 'react';
 
-export const FormBlock: React.FC<any> = (props) => {
-  const [formData, setFormData] = useState({ name: '', email: '', phone: '' });
+type FormBlockProps = {
+  title?: string | null;
+  description?: string | null;
+  showButton?: boolean | null;
+  buttonText?: string | null;
+  webhookUrl?: string | null;
+};
+
+type LeadFormState = {
+  name: string;
+  email: string;
+  phone: string;
+};
+
+const DEFAULT_TITLE = 'Dê o primeiro passo';
+const DEFAULT_DESCRIPTION = 'Preencha os dados abaixo para agendar sua avaliação na IPRO-Saúde.';
+const DEFAULT_BUTTON_TEXT = 'Solicitar Atendimento';
+
+export const FormBlock: React.FC<FormBlockProps> = ({
+  title,
+  description,
+  showButton,
+  buttonText,
+  webhookUrl,
+}) => {
+  const [formData, setFormData] = useState<LeadFormState>({ name: '', email: '', phone: '' });
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
 
   const formatPhone = (value: string) => {
@@ -14,25 +38,60 @@ export const FormBlock: React.FC<any> = (props) => {
     return numbers;
   };
 
+  const sanitizeText = (value: string) => value.replace(/\s+/g, ' ').trim();
+
+  const sanitizeEmail = (value: string) => sanitizeText(value).toLowerCase();
+
+  const sanitizedWebhookUrl = sanitizeText(webhookUrl || '');
+  const shouldShowButton = showButton ?? true;
+  const resolvedTitle = sanitizeText(title || '') || DEFAULT_TITLE;
+  const resolvedDescription = sanitizeText(description || '') || DEFAULT_DESCRIPTION;
+  const resolvedButtonText = sanitizeText(buttonText || '') || DEFAULT_BUTTON_TEXT;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const digits = formData.phone.replace(/\D/g, '');
-    if (digits.length < 10) {
-        alert('Por favor, insira um telefone válido com DDD.');
-        return;
+
+    if (!shouldShowButton) {
+      return;
     }
+
+    const digits = formData.phone.replace(/\D/g, '');
+
+    if (digits.length < 10) {
+      alert('Por favor, insira um telefone válido com DDD.');
+      return;
+    }
+
     setStatus('submitting');
+
+    const payload = {
+      name: sanitizeText(formData.name),
+      phone: digits,
+      email: formData.email ? sanitizeEmail(formData.email) : '',
+      pageSlug: window.location.pathname,
+      source: 'landing-page',
+    };
+
     try {
-      // Sua lógica original de API mantida
-      const res = await fetch('/api/leads', {
+      const res = await fetch('/cms/api/leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, formId: props.formId, pageSlug: window.location.pathname }),
+        body: JSON.stringify(payload),
       });
+
       if (!res.ok) throw new Error('Failed');
+
+      if (sanitizedWebhookUrl) {
+        fetch(sanitizedWebhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        }).catch(() => undefined);
+      }
+
       setStatus('success');
       setFormData({ name: '', email: '', phone: '' });
-    } catch (error) {
+    } catch {
       setStatus('error');
     }
   };
@@ -57,8 +116,8 @@ export const FormBlock: React.FC<any> = (props) => {
         {/* Detalhe estético no topo do formulário */}
         <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-amber-400 to-amber-600"></div>
         
-        <h3 className="text-3xl font-bold text-slate-900 mb-2 text-center tracking-tight">Dê o primeiro passo</h3>
-        <p className="text-slate-500 text-center mb-8 font-light">Preencha os dados abaixo para agendar sua avaliação na IPRO-Saúde.</p>
+        <h3 className="text-3xl font-bold text-slate-900 mb-2 text-center tracking-tight">{resolvedTitle}</h3>
+        <p className="text-slate-500 text-center mb-8 font-light">{resolvedDescription}</p>
         
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
@@ -76,9 +135,11 @@ export const FormBlock: React.FC<any> = (props) => {
 
           {status === 'error' && <p className="text-red-500 text-sm font-medium text-center">Ocorreu um erro. Tente nos chamar direto no WhatsApp.</p>}
 
-          <button type="submit" disabled={status === 'submitting'} className="w-full bg-slate-900 hover:bg-slate-800 text-white text-lg font-bold py-4 px-6 rounded-xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed">
-            {status === 'submitting' ? 'Enviando Dados...' : 'Solicitar Atendimento'}
-          </button>
+          {shouldShowButton && (
+            <button type="submit" disabled={status === 'submitting'} className="w-full bg-slate-900 hover:bg-slate-800 text-white text-lg font-bold py-4 px-6 rounded-xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed">
+              {status === 'submitting' ? 'Enviando Dados...' : resolvedButtonText}
+            </button>
+          )}
         </form>
       </div>
     </section>

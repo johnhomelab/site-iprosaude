@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import CadastroPacientePageClient from '@/components/CadastroPacientePageClient'
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://iprosaude.com.br/'),
   title: 'Cadastro de Paciente | IPRO-Saúde',
   description:
     'Preencha seus dados para agilizar seu atendimento na IPRO-Saúde.',

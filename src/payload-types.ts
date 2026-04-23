@@ -8,25 +8,25 @@
 
 export interface Config {
   auth: {
-    users: UserAuthOperations;
+    '🧑🏻‍💻users': UserAuthOperations;
   };
   collections: {
-    users: User;
+    '🧑🏻‍💻users': User;
     media: Media;
     tratamentos: Tratamento;
-    'landing-pages': LandingPage;
-    leads: Lead;
+    '📝landing-pages': LandingPage;
+    '👨‍👩‍👧‍👦leads': Lead;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
   collectionsJoins: {};
   collectionsSelect: {
-    users: UsersSelect<false> | UsersSelect<true>;
+    '🧑🏻‍💻users': UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     tratamentos: TratamentosSelect<false> | TratamentosSelect<true>;
-    'landing-pages': LandingPagesSelect<false> | LandingPagesSelect<true>;
-    leads: LeadsSelect<false> | LeadsSelect<true>;
+    '📝landing-pages': LandingPagesSelect<false> | LandingPagesSelect<true>;
+    '👨‍👩‍👧‍👦leads': LeadsSelect<false> | LeadsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -46,7 +46,7 @@ export interface Config {
   };
   locale: null;
   user: User & {
-    collection: 'users';
+    collection: '🧑🏻‍💻users';
   };
   jobs: {
     tasks: unknown;
@@ -73,7 +73,7 @@ export interface UserAuthOperations {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users".
+ * via the `definition` "🧑🏻‍💻users".
  */
 export interface User {
   id: number;
@@ -168,7 +168,7 @@ export interface Tratamento {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "landing-pages".
+ * via the `definition` "📝landing-pages".
  */
 export interface LandingPage {
   id: number;
@@ -246,7 +246,11 @@ export interface LandingPage {
         blockType: 'testimonials';
       }
     | {
-        formId?: string | null;
+        title?: string | null;
+        description?: string | null;
+        showButton?: boolean | null;
+        buttonText?: string | null;
+        webhookUrl?: string | null;
         id?: string | null;
         blockName?: string | null;
         blockType: 'form';
@@ -362,12 +366,15 @@ export interface LandingPage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "leads".
+ * via the `definition` "👨‍👩‍👧‍👦leads".
  */
 export interface Lead {
   id: number;
   name: string;
   phone: string;
+  email?: string | null;
+  pageSlug?: string | null;
+  source?: string | null;
   whatsapp?: string | null;
   isUrgent?: boolean | null;
   message?: string | null;
@@ -382,7 +389,7 @@ export interface PayloadLockedDocument {
   id: number;
   document?:
     | ({
-        relationTo: 'users';
+        relationTo: '🧑🏻‍💻users';
         value: number | User;
       } | null)
     | ({
@@ -394,16 +401,16 @@ export interface PayloadLockedDocument {
         value: number | Tratamento;
       } | null)
     | ({
-        relationTo: 'landing-pages';
+        relationTo: '📝landing-pages';
         value: number | LandingPage;
       } | null)
     | ({
-        relationTo: 'leads';
+        relationTo: '👨‍👩‍👧‍👦leads';
         value: number | Lead;
       } | null);
   globalSlug?: string | null;
   user: {
-    relationTo: 'users';
+    relationTo: '🧑🏻‍💻users';
     value: number | User;
   };
   updatedAt: string;
@@ -416,7 +423,7 @@ export interface PayloadLockedDocument {
 export interface PayloadPreference {
   id: number;
   user: {
-    relationTo: 'users';
+    relationTo: '🧑🏻‍💻users';
     value: number | User;
   };
   key?: string | null;
@@ -445,20 +452,20 @@ export interface PayloadMigration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users_select".
+ * via the `definition` "🧑🏻‍💻users_select".
  */
-export interface UsersSelect<T extends boolean = true> {
-  nome?: T;
-  role?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  email?: T;
-  resetPasswordToken?: T;
-  resetPasswordExpiration?: T;
-  salt?: T;
-  hash?: T;
-  loginAttempts?: T;
-  lockUntil?: T;
+export interface UsersSelect {
+  nome?: boolean;
+  role?: boolean;
+  updatedAt?: boolean;
+  createdAt?: boolean;
+  email?: boolean;
+  resetPasswordToken?: boolean;
+  resetPasswordExpiration?: boolean;
+  salt?: boolean;
+  hash?: boolean;
+  loginAttempts?: boolean;
+  lockUntil?: boolean;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -548,217 +555,224 @@ export interface TratamentosSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "landing-pages_select".
+ * via the `definition` "📝landing-pages_select".
  */
-export interface LandingPagesSelect<T extends boolean = true> {
-  title?: T;
-  slug?: T;
-  showFloatingButton?: T;
-  showHeader?: T;
+export interface LandingPagesSelect {
+  title?: boolean;
+  slug?: boolean;
+  showFloatingButton?: boolean;
+  showHeader?: boolean;
   layout?:
-    | T
+    | boolean
     | {
         hero?:
-          | T
+          | boolean
           | {
-              heading?: T;
-              text?: T;
-              backgroundImage?: T;
-              id?: T;
-              blockName?: T;
+              heading?: boolean;
+              text?: boolean;
+              backgroundImage?: boolean;
+              id?: boolean;
+              blockName?: boolean;
             };
         'hero-gold'?:
-          | T
+          | boolean
           | {
-              title?: T;
-              subtitle?: T;
+              title?: boolean;
+              subtitle?: boolean;
               botao?:
-                | T
+                | boolean
                 | {
-                    texto?: T;
-                    url?: T;
-                    cor?: T;
+                    texto?: boolean;
+                    url?: boolean;
+                    cor?: boolean;
                   };
-              image?: T;
-              id?: T;
-              blockName?: T;
+              image?: boolean;
+              id?: boolean;
+              blockName?: boolean;
             };
         content?:
-          | T
+          | boolean
           | {
-              content?: T;
-              id?: T;
-              blockName?: T;
+              content?: boolean;
+              id?: boolean;
+              blockName?: boolean;
             };
         features?:
-          | T
+          | boolean
           | {
               features?:
-                | T
+                | boolean
                 | {
-                    icone?: T;
-                    title?: T;
-                    description?: T;
-                    id?: T;
+                    icone?: boolean;
+                    title?: boolean;
+                    description?: boolean;
+                    id?: boolean;
                   };
-              id?: T;
-              blockName?: T;
+              id?: boolean;
+              blockName?: boolean;
             };
         testimonials?:
-          | T
+          | boolean
           | {
               items?:
-                | T
+                | boolean
                 | {
-                    name?: T;
-                    testimonial?: T;
-                    rating?: T;
-                    image?: T;
-                    id?: T;
+                    name?: boolean;
+                    testimonial?: boolean;
+                    rating?: boolean;
+                    image?: boolean;
+                    id?: boolean;
                   };
-              id?: T;
-              blockName?: T;
+              id?: boolean;
+              blockName?: boolean;
             };
         form?:
-          | T
+          | boolean
           | {
-              formId?: T;
-              id?: T;
-              blockName?: T;
+              title?: boolean;
+              description?: boolean;
+              showButton?: boolean;
+              buttonText?: boolean;
+              webhookUrl?: boolean;
+              id?: boolean;
+              blockName?: boolean;
             };
         cta?:
-          | T
+          | boolean
           | {
-              text?: T;
+              text?: boolean;
               botao?:
-                | T
+                | boolean
                 | {
-                    label?: T;
-                    url?: T;
-                    style?: T;
+                    label?: boolean;
+                    url?: boolean;
+                    style?: boolean;
                   };
-              id?: T;
-              blockName?: T;
+              id?: boolean;
+              blockName?: boolean;
             };
         formLead?:
-          | T
+          | boolean
           | {
-              title?: T;
-              description?: T;
-              buttonText?: T;
-              id?: T;
-              blockName?: T;
+              title?: boolean;
+              description?: boolean;
+              buttonText?: boolean;
+              id?: boolean;
+              blockName?: boolean;
             };
         treatmentList?:
-          | T
+          | boolean
           | {
-              title?: T;
-              description?: T;
-              tratamentosSelecionados?: T;
-              id?: T;
-              blockName?: T;
+              title?: boolean;
+              description?: boolean;
+              tratamentosSelecionados?: boolean;
+              id?: boolean;
+              blockName?: boolean;
             };
         beforeAfter?:
-          | T
+          | boolean
           | {
-              title?: T;
-              description?: T;
-              layout?: T;
-              labelBefore?: T;
-              labelAfter?: T;
+              title?: boolean;
+              description?: boolean;
+              layout?: boolean;
+              labelBefore?: boolean;
+              labelAfter?: boolean;
               comparisons?:
-                | T
+                | boolean
                 | {
-                    beforeImage?: T;
-                    afterImage?: T;
-                    id?: T;
+                    beforeImage?: boolean;
+                    afterImage?: boolean;
+                    id?: boolean;
                   };
-              id?: T;
-              blockName?: T;
+              id?: boolean;
+              blockName?: boolean;
             };
         faq?:
-          | T
+          | boolean
           | {
-              titulo?: T;
+              titulo?: boolean;
               perguntas?:
-                | T
+                | boolean
                 | {
-                    pergunta?: T;
-                    resposta?: T;
-                    id?: T;
+                    pergunta?: boolean;
+                    resposta?: boolean;
+                    id?: boolean;
                   };
-              id?: T;
-              blockName?: T;
+              id?: boolean;
+              blockName?: boolean;
             };
         team?:
-          | T
+          | boolean
           | {
-              tituloSessao?: T;
+              tituloSessao?: boolean;
               membros?:
-                | T
+                | boolean
                 | {
-                    nome?: T;
-                    cro?: T;
-                    especialidade?: T;
-                    descricao?: T;
-                    foto?: T;
-                    id?: T;
+                    nome?: boolean;
+                    cro?: boolean;
+                    especialidade?: boolean;
+                    descricao?: boolean;
+                    foto?: boolean;
+                    id?: boolean;
                   };
-              id?: T;
-              blockName?: T;
+              id?: boolean;
+              blockName?: boolean;
             };
         location?:
-          | T
+          | boolean
           | {
-              titulo?: T;
-              endereco?: T;
-              horario?: T;
-              mapUrl?: T;
-              id?: T;
-              blockName?: T;
+              titulo?: boolean;
+              endereco?: boolean;
+              horario?: boolean;
+              mapUrl?: boolean;
+              id?: boolean;
+              blockName?: boolean;
             };
         authority?:
-          | T
+          | boolean
           | {
-              headline?: T;
-              nomeProfissional?: T;
-              credenciais?: T;
-              registro?: T;
-              descricao?: T;
-              fotoAutoridade?: T;
+              headline?: boolean;
+              nomeProfissional?: boolean;
+              credenciais?: boolean;
+              registro?: boolean;
+              descricao?: boolean;
+              fotoAutoridade?: boolean;
               numerosDeSucesso?:
-                | T
+                | boolean
                 | {
-                    numero?: T;
-                    legenda?: T;
-                    id?: T;
+                    numero?: boolean;
+                    legenda?: boolean;
+                    id?: boolean;
                   };
-              id?: T;
-              blockName?: T;
+              id?: boolean;
+              blockName?: boolean;
             };
       };
   meta?:
-    | T
+    | boolean
     | {
-        title?: T;
-        description?: T;
-        image?: T;
+        title?: boolean;
+        description?: boolean;
+        image?: boolean;
       };
-  updatedAt?: T;
-  createdAt?: T;
+  updatedAt?: boolean;
+  createdAt?: boolean;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "leads_select".
+ * via the `definition` "👨‍👩‍👧‍👦leads_select".
  */
-export interface LeadsSelect<T extends boolean = true> {
-  name?: T;
-  phone?: T;
-  whatsapp?: T;
-  isUrgent?: T;
-  message?: T;
-  updatedAt?: T;
-  createdAt?: T;
+export interface LeadsSelect {
+  name?: boolean;
+  phone?: boolean;
+  email?: boolean;
+  pageSlug?: boolean;
+  source?: boolean;
+  whatsapp?: boolean;
+  isUrgent?: boolean;
+  message?: boolean;
+  updatedAt?: boolean;
+  createdAt?: boolean;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -798,17 +812,26 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface HeaderSetting {
   id: number;
+  backgroundColor?: string | null;
+  backdropBlur?: boolean | null;
+  transparency?: number | null;
+  height?: ('sm' | 'md' | 'lg') | null;
   logoTextPrimary: string;
   logoTextHighlight: string;
   logoImage?: (number | null) | Media;
+  showAnnouncement?: boolean | null;
+  announcementText?: string | null;
+  announcementColor?: ('amber' | 'red' | 'green') | null;
   showWhatsappButton?: boolean | null;
   whatsappNumber?: string | null;
   whatsappButtonText?: string | null;
+  whatsappMessage?: string | null;
   menuItems?:
     | {
         label: string;
         href: string;
         highlight?: boolean | null;
+        newTab?: boolean | null;
         id?: string | null;
       }[]
     | null;
@@ -841,6 +864,9 @@ export interface FooterSetting {
  */
 export interface Settings {
   id: number;
+  metadata?: {
+    siteIcon?: (number | null) | Media;
+  };
   analytics?: {
     headerScripts?: string | null;
     bodyScripts?: string | null;
@@ -856,18 +882,27 @@ export interface Settings {
  * via the `definition` "header-settings_select".
  */
 export interface HeaderSettingsSelect<T extends boolean = true> {
+  backgroundColor?: T;
+  backdropBlur?: T;
+  transparency?: T;
+  height?: T;
   logoTextPrimary?: T;
   logoTextHighlight?: T;
   logoImage?: T;
+  showAnnouncement?: T;
+  announcementText?: T;
+  announcementColor?: T;
   showWhatsappButton?: T;
   whatsappNumber?: T;
   whatsappButtonText?: T;
+  whatsappMessage?: T;
   menuItems?:
     | T
     | {
         label?: T;
         href?: T;
         highlight?: T;
+        newTab?: T;
         id?: T;
       };
   updatedAt?: T;
@@ -899,6 +934,11 @@ export interface FooterSettingsSelect<T extends boolean = true> {
  * via the `definition` "settings_select".
  */
 export interface SettingsSelect<T extends boolean = true> {
+  metadata?:
+    | T
+    | {
+        siteIcon?: T;
+      };
   analytics?:
     | T
     | {

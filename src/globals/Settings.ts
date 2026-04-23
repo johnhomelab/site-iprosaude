@@ -2,6 +2,7 @@ import { GlobalConfig } from 'payload';
 
 export const Settings: GlobalConfig = {
   slug: 'settings',
+  label: '⚙️Configurações do Site',
   typescript: {
     interface: 'Settings',
   },
@@ -12,6 +13,22 @@ export const Settings: GlobalConfig = {
     read: () => true,
   },
   fields: [
+    {
+      name: 'metadata',
+      label: 'SEO e Identidade do Site',
+      type: 'group',
+      fields: [
+        {
+          name: 'siteIcon',
+          label: 'Ícone do site (favicon)',
+          type: 'upload',
+          relationTo: 'media',
+          admin: {
+            description: 'Imagem exibida na aba do navegador como ícone do site.',
+          },
+        },
+      ],
+    },
     {
       name: 'analytics',
       label: 'Analytics & Scripts',
